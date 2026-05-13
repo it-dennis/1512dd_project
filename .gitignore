@@ -1,0 +1,31 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# Node
+node_modules/
+dist/
+.cache/
+
+# v86 binaries (separate download — see README)
+frontend/public/v86/*.bin
+frontend/public/v86/*.img
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+
+

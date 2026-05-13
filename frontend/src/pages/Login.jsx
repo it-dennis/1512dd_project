@@ -1,0 +1,79 @@
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { authApi } from '../api/client';
+import { useAuth } from '../context/AuthContext';
+
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/emulator';
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const res = await authApi.login(email, password);
+      await login(res.data.access_token);
+      navigate(from, { replace: true });
+    } catch {
+      setError('E-Mail oder Passwort falsch.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto px-4 py-24">
+      <h1 className="text-3xl font-bold text-white mb-2">Login</h1>
+      <p className="text-gray-400 mb-8 font-mono text-sm">
+        Einloggen um den Emulator zu starten.
+      </p>
+
+      <form onSubmit={handleSubmit} className="card space-y-4">
+        {error && (
+          <div className="text-red-400 text-sm font-mono bg-red-950/30 border border-red-800 rounded p-3">
+            {error}
+          </div>
+        )}
+        <div>
+          <label className="text-gray-400 text-sm font-mono block mb-2">E-Mail</label>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            className="input-field"
+          />
+        </div>
+        <div>
+          <label className="text-gray-400 text-sm font-mono block mb-2">Passwort</label>
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            className="input-field"
+          />
+        </div>
+        <button type="submit" disabled={loading} className="btn-primary w-full py-3">
+          {loading ? 'Einloggen...' : 'Einloggen'}
+        </button>
+      </form>
+
+      <p className="text-gray-500 font-mono text-sm mt-6 text-center">
+        Noch kein Konto?{' '}
+        <Link to="/register" className="text-amber-500 hover:underline">
+          Registrieren
+        </Link>
+      </p>
+    </div>
+  );
+}
