@@ -14,9 +14,11 @@ node_modules/
 dist/
 .cache/
 
-# v86 binaries (separate download — see README)
+# v86 binaries (downloaded during Docker build — see frontend/Dockerfile)
 frontend/public/v86/*.bin
 frontend/public/v86/*.img
+frontend/public/v86/*.js
+frontend/public/v86/*.wasm
 
 # OS
 .DS_Store
