@@ -22,6 +22,11 @@ frontend/public/v86/*.img
 .DS_Store
 Thumbs.db
 
+# Sensitive local files
+*.txt
+*.odt
+*.odt#
+
 # IDE
 .vscode/
 .idea/
