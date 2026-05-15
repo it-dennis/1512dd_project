@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const EMULATOR_CONFIG = {
+  wasm_path: '/v86/v86.wasm',
   bios: { url: '/v86/seabios.bin' },
   vga_bios: { url: '/v86/vgabios.bin' },
   fda: { url: '/v86/freedos722.img' },
