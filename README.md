@@ -1,4 +1,4 @@
-# Schneider/Amstrad PC1512-DD — Browser-Emulator // PC1512-DD Wiki //  
+# Schneider/Amstrad PC1512-DD — Browser-Emulator // PC1512-DD Wiki //
 
 Ein Weiterbildungsprojekt: 3-Schicht-Webanwendung mit eingebettetem x86-Emulator (v86).
 
@@ -43,7 +43,7 @@ Die Anwendung ist danach erreichbar unter:
 |-------|-------------------------|------------|
 | Admin | admin@pc1512.local      | admin1512  |
 
-## v86-Binärdateien
+# v86-Binärdateien
 
 Der Emulator benötigt Dateien, die **separat** heruntergeladen werden müssen und nicht im Repository liegen.
 

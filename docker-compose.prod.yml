@@ -20,8 +20,7 @@ services:
 
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
+    # Port 8000 wird nicht mehr nach außen exponiert — nginx übernimmt als einziger Eintrittspunkt
     env_file:
       - .env
     environment:
@@ -29,6 +28,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
     restart: unless-stopped
 
 volumes:
