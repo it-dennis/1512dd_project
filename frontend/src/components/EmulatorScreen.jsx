@@ -16,14 +16,14 @@ export default function EmulatorScreen() {
   const [started, setStarted] = useState(false);
 
   const startEmulator = () => {
-    if (!window.V86Starter) {
+    if (!window.V86) {
       setStatus('error');
       return;
     }
     setStatus('loading');
     setStarted(true);
 
-    emulatorRef.current = new window.V86Starter({
+    emulatorRef.current = new window.V86({
       ...EMULATOR_CONFIG,
       screen_container: screenRef.current,
     });
