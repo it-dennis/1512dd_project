@@ -58,12 +58,13 @@ export default function EmulatorScreen() {
         </div>
       )}
 
-      {/* Screen container */}
+      {/* Screen container — v86 requires exactly: first a div (text mode), then a canvas (VGA) */}
       <div
         ref={screenRef}
         className="border border-gray-700 rounded bg-black w-full"
         style={{ minHeight: started ? '400px' : '0' }}
       >
+        <div style={{ whiteSpace: 'pre', font: '14px monospace', lineHeight: '14px' }} />
         <canvas style={{ display: 'block', width: '100%' }} />
       </div>
 
