@@ -8,11 +8,13 @@ from routers import auth as auth_router
 from routers import articles as articles_router
 from routers import users as users_router
 from seed import run_seed
+from migrations import run_migrations
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    run_migrations()
     run_seed()
     yield
 

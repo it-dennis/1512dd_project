@@ -126,7 +126,11 @@ Mit v86 im Browser läuft Frogger auf dem emulierten PC1512 genauso wie 1986 —
 def run_seed():
     db = SessionLocal()
     try:
-        if db.query(models.User).filter(models.User.email == "admin@pc1512.local").first():
+        existing_admin = db.query(models.User).filter(models.User.email == "admin@pc1512.local").first()
+        if existing_admin:
+            if not existing_admin.is_verified:
+                existing_admin.is_verified = True
+                db.commit()
             return  # already seeded
 
         admin = models.User(
@@ -134,6 +138,7 @@ def run_seed():
             username="admin",
             password_hash=hash_password("admin1512"),
             is_admin=True,
+            is_verified=True,
         )
         db.add(admin)
         db.flush()

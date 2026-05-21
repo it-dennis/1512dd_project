@@ -8,6 +8,7 @@ import ArticleDetail from './pages/ArticleDetail';
 import Emulator from './pages/Emulator';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import VerifyEmail from './pages/VerifyEmail';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route
               path="/emulator"
               element={

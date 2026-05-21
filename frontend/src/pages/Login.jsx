@@ -21,8 +21,13 @@ export default function Login() {
       const res = await authApi.login(email, password);
       await login(res.data.access_token);
       navigate(from, { replace: true });
-    } catch {
-      setError('E-Mail oder Passwort falsch.');
+    } catch (err) {
+      const detail = err.response?.data?.detail || '';
+      if (detail.includes('nicht bestätigt')) {
+        setError('E-Mail-Adresse noch nicht bestätigt. Bitte prüfe dein Postfach.');
+      } else {
+        setError('E-Mail oder Passwort falsch.');
+      }
     } finally {
       setLoading(false);
     }

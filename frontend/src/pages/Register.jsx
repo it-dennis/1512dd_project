@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { authApi } from '../api/client';
-import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -9,23 +8,50 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [registered, setRegistered] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      const res = await authApi.register(email, username, password);
-      await login(res.data.access_token);
-      navigate('/emulator');
+      await authApi.register(email, username, password);
+      setRegistered(true);
     } catch (err) {
       setError(err.response?.data?.detail || 'Registrierung fehlgeschlagen.');
     } finally {
       setLoading(false);
     }
   };
+
+  if (registered) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-24">
+        <h1 className="text-3xl font-bold text-white mb-2">Fast geschafft!</h1>
+        <p className="text-gray-400 mb-8 font-mono text-sm">
+          Konto erfolgreich erstellt.
+        </p>
+        <div className="card space-y-4">
+          <div className="text-amber-400 font-mono text-sm bg-amber-950/30 border border-amber-800 rounded p-4">
+            <p className="font-bold mb-2">Bestätigungs-E-Mail gesendet</p>
+            <p className="text-amber-300/80">
+              Wir haben eine E-Mail an <span className="text-amber-400 font-bold">{email}</span> geschickt.
+              Klicke auf den Link in der E-Mail, um dein Konto zu aktivieren.
+            </p>
+          </div>
+          <p className="text-gray-500 font-mono text-xs">
+            Keine E-Mail erhalten? Überprüfe deinen Spam-Ordner.
+          </p>
+        </div>
+        <p className="text-gray-500 font-mono text-sm mt-6 text-center">
+          Schon bestätigt?{' '}
+          <Link to="/login" className="text-amber-500 hover:underline">
+            Jetzt einloggen
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto px-4 py-24">

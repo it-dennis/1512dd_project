@@ -19,6 +19,10 @@ class Token(BaseModel):
     token_type: str
 
 
+class RegisterResponse(BaseModel):
+    message: str
+
+
 class UserOut(BaseModel):
     id: int
     email: str
