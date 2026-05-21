@@ -8,7 +8,6 @@ import ArticleDetail from './pages/ArticleDetail';
 import Emulator from './pages/Emulator';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import VerifyEmail from './pages/VerifyEmail';
 
 export default function App() {
   return (
@@ -22,7 +21,6 @@ export default function App() {
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route
               path="/emulator"
               element={
@@ -34,7 +32,7 @@ export default function App() {
           </Routes>
         </main>
         <footer className="border-t border-gray-800 py-6 text-center text-gray-600 font-mono text-xs">
-          Amstrad PC1512-DD Emulator Platform · Weiterbildungsprojekt
+          Schneider/Amstrad PC1512-DD Emulator Plattform · Weiterbildungsprojekt von Dennis Rapp · 2026
         </footer>
       </div>
     </AuthProvider>

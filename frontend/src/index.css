@@ -4,23 +4,23 @@
 
 @layer base {
   body {
-    @apply bg-gray-950 text-gray-100 antialiased;
+    @apply bg-gray-950 text-white font-mono text-sm antialiased;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 bg-amber-500 text-black font-bold rounded hover:bg-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-4 py-2 bg-[#00FF41] text-black font-bold rounded hover:bg-[#00FF41] transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
-    @apply px-4 py-2 border border-amber-500 text-amber-500 font-mono rounded hover:bg-amber-500 hover:text-black transition-colors;
+    @apply px-4 py-2 border border-[#00FF41] text-[#00FF41] font-mono rounded hover:bg-[#00FF41] hover:text-black transition-colors;
   }
   .card {
     @apply bg-gray-900 border border-gray-800 rounded-lg p-6;
   }
   .input-field {
     @apply w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white font-mono
-           focus:outline-none focus:border-amber-500 transition-colors;
+           focus:outline-none focus:border-[#00FF41] transition-colors;
   }
 }
 
@@ -41,7 +41,7 @@
   @apply leading-relaxed;
 }
 .md-content code {
-  @apply font-mono bg-gray-800 text-amber-400 px-1 rounded text-sm;
+  @apply font-mono bg-gray-800 text-[#00FF41] px-1 rounded text-sm;
 }
 .md-content pre {
   @apply bg-gray-800 rounded p-4 mb-4 overflow-x-auto;

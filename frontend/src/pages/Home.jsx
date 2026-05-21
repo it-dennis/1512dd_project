@@ -16,12 +16,12 @@ const FEATURES = [
   {
     icon: '📚',
     title: 'Infothek',
-    desc: 'Artikel zur Geschichte des PC1512, zu GEM Desktop, MS-DOS und den Spielen der Ära.',
+    desc: 'Wie kam es zum PC1512? Warum Schneider und auch Amstrad? Hä? Alles zur Geschichte und Technik findest du hier.',
   },
   {
     icon: '🖥',
-    title: 'Originalgetreu',
-    desc: 'Intel 8086, CGA-Grafik, PC Speaker — emuliert wie 1986.',
+    title: 'Originalgetreue Emulation',
+    desc: 'Intel 8086, CGA-Grafik und MS-DOS 3.3 — genau wie damals. Ach, und GEM. Ja, GEM. Das ultracoole GUI von Digital Research. Mensch, du wirst es lieben.',
   },
 ];
 
@@ -33,16 +33,16 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-950/20 to-transparent pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 py-24 relative">
           <p className="font-mono text-amber-500 text-sm tracking-widest mb-4 uppercase">
-            Amstrad · Schneider PC1512-DD · 1986
+            Schneider Amstrad PC1512-DD // Emulation · Infothek · Liebe
           </p>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Der erste PC
+            Der PC
             <br />
-            <span className="text-amber-400">meines Vaters.</span>
+            <span className="text-amber-400">der alles veränderte.</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl mb-10 leading-relaxed">
-            Eine Zeitreise in die Frühzeit des Personal Computing. Emuliere den Amstrad PC1512-DD
-            direkt im Browser — mit MS-DOS und den Spielen von damals.
+            Die "Alles-aus-einer-Hand"-Strategie machte einen PC plötzlich bezahlbar für fast jeden.
+            Der PC1512 war nicht nur ein Verkaufsschlager, sondern auch der Beginn einer neuen Ära in der Computerwelt. Erlebe die Faszination dieses Kultgeräts hautnah – direkt in deinem Browser.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link to="/register" className="btn-primary text-base px-6 py-3">
