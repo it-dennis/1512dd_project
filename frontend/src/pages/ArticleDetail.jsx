@@ -18,7 +18,7 @@ export default function ArticleDetail() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16">
         <div className="card border-red-800 text-red-400 mb-6 font-mono text-sm">{error}</div>
-        <Link to="/articles" className="text-amber-500 hover:underline font-mono text-sm">
+        <Link to="/articles" className="text-green-400 hover:underline font-mono text-sm">
           ← Zurück zur Infothek
         </Link>
       </div>
@@ -27,7 +27,7 @@ export default function ArticleDetail() {
 
   if (!article) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-16 font-mono text-amber-500 animate-pulse">
+      <div className="max-w-3xl mx-auto px-4 py-16 font-mono text-green-400 animate-pulse">
         Lade Artikel...
       </div>
     );
@@ -41,12 +41,12 @@ export default function ArticleDetail() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
-      <Link to="/articles" className="text-amber-500 hover:underline mb-8 inline-block font-mono text-sm">
+      <Link to="/articles" className="text-green-400 hover:underline mb-8 inline-block font-mono text-sm">
         ← Infothek
       </Link>
 
       {article.category && (
-        <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-3 mt-6">
+        <div className="text-green-400 font-mono text-xs uppercase tracking-wider mb-3 mt-6">
           {article.category.name}
         </div>
       )}

@@ -27,12 +27,12 @@ def send_verification_email(to_email: str, username: str, token: str):
 <html>
 <body style="background:#0a0a0a;color:#d1d5db;font-family:monospace;padding:40px;margin:0;">
   <div style="max-width:500px;margin:0 auto;border:1px solid #374151;padding:32px;border-radius:4px;">
-    <h1 style="color:#f59e0b;margin:0 0 8px 0;font-size:20px;">PC1512 Emulator Platform</h1>
+    <h1 style="color:#00FF41;margin:0 0 8px 0;font-size:20px;">PC1512 Emulator Platform</h1>
     <p style="color:#9ca3af;margin:0 0 16px 0;">Hallo {username},</p>
     <p style="margin:0 0 16px 0;">danke für deine Registrierung! Bitte bestätige deine E-Mail-Adresse, um den Emulator nutzen zu können.</p>
     <div style="text-align:center;margin:32px 0;">
       <a href="{verify_url}"
-         style="background:#f59e0b;color:#000000;padding:12px 28px;text-decoration:none;font-weight:bold;border-radius:4px;display:inline-block;">
+         style="background:#00FF41;color:#000000;padding:12px 28px;text-decoration:none;font-weight:bold;border-radius:4px;display:inline-block;">
         E-Mail bestätigen
       </a>
     </div>

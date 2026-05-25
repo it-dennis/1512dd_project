@@ -22,7 +22,7 @@ export default function Articles() {
       </p>
 
       {loading && (
-        <div className="font-mono text-amber-500 animate-pulse">Lade Artikel...</div>
+        <div className="font-mono text-green-400 animate-pulse">Lade Artikel...</div>
       )}
 
       {error && (

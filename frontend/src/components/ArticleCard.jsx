@@ -10,14 +10,14 @@ export default function ArticleCard({ article }) {
   return (
     <Link
       to={`/articles/${article.slug}`}
-      className="card hover:border-amber-500/50 transition-colors block group"
+      className="card hover:border-green-400/50 transition-colors block group"
     >
       {article.category && (
-        <span className="text-amber-500 font-mono text-xs uppercase tracking-wider">
+        <span className="text-green-400 font-mono text-xs uppercase tracking-wider">
           {article.category.name}
         </span>
       )}
-      <h2 className="text-white font-bold text-lg mt-2 mb-3 group-hover:text-amber-100 transition-colors leading-snug">
+      <h2 className="text-white font-bold text-lg mt-2 mb-3 group-hover:text-green-100 transition-colors leading-snug">
         {article.title}
       </h2>
       {article.excerpt && (

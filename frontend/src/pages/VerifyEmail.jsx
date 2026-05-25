@@ -36,13 +36,13 @@ export default function VerifyEmail() {
       {status === 'success' && (
         <>
           <div className="card mt-8">
-            <div className="text-amber-400 font-mono text-sm bg-amber-950/30 border border-amber-800 rounded p-4">
+            <div className="text-green-400 font-mono text-sm bg-green-950/30 border border-green-800 rounded p-4">
               <p className="font-bold mb-1">Erfolgreich bestätigt!</p>
-              <p className="text-amber-300/80">{message}</p>
+              <p className="text-green-300/80">{message}</p>
             </div>
           </div>
           <p className="text-gray-500 font-mono text-sm mt-6 text-center">
-            <Link to="/login" className="text-amber-500 hover:underline">
+            <Link to="/login" className="text-green-400 hover:underline">
               Jetzt einloggen
             </Link>
           </p>
@@ -58,7 +58,7 @@ export default function VerifyEmail() {
             </div>
           </div>
           <p className="text-gray-500 font-mono text-sm mt-6 text-center">
-            <Link to="/register" className="text-amber-500 hover:underline">
+            <Link to="/register" className="text-green-400 hover:underline">
               Erneut registrieren
             </Link>
           </p>

@@ -30,15 +30,15 @@ export default function Home() {
     <div>
       {/* Hero */}
       <section className="relative border-b border-gray-800 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-950/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-950/20 to-transparent pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 py-24 relative">
-          <p className="font-mono text-amber-500 text-sm tracking-widest mb-4 uppercase">
+          <p className="font-mono text-green-400 text-sm tracking-widest mb-4 uppercase">
             Schneider Amstrad PC1512-DD // Emulation · Infothek · Liebe
           </p>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Der PC
             <br />
-            <span className="text-amber-400">der alles veränderte.</span>
+            <span className="text-green-400">der alles veränderte.</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl mb-10 leading-relaxed">
             Die "Alles-aus-einer-Hand"-Strategie machte einen PC plötzlich bezahlbar für fast jeden.
@@ -59,12 +59,12 @@ export default function Home() {
       <section className="border-b border-gray-800">
         <div className="max-w-6xl mx-auto px-4 py-16">
           <h2 className="text-2xl font-bold text-white mb-10 font-mono">
-            <span className="text-amber-500">//</span> Technische Daten
+            <span className="text-green-400">//</span> Technische Daten
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {SPECS.map(spec => (
               <div key={spec.label} className="card">
-                <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-2">
+                <div className="text-green-400 font-mono text-xs uppercase tracking-wider mb-2">
                   {spec.label}
                 </div>
                 <div className="text-white text-2xl font-bold">{spec.value}</div>
@@ -78,7 +78,7 @@ export default function Home() {
       {/* Features */}
       <section className="max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-2xl font-bold text-white mb-10 font-mono">
-          <span className="text-amber-500">//</span> Was dich erwartet
+          <span className="text-green-400">//</span> Was dich erwartet
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {FEATURES.map(f => (

@@ -70,7 +70,7 @@ export default function Login() {
 
       <p className="text-gray-500 font-mono text-sm mt-6 text-center">
         Noch kein Konto?{' '}
-        <Link to="/register" className="text-amber-500 hover:underline">
+        <Link to="/register" className="text-green-400 hover:underline">
           Registrieren
         </Link>
       </p>

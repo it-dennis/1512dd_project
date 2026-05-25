@@ -14,13 +14,13 @@ export default function Emulator() {
 
       <div className="mt-8 card">
         <h2 className="text-white font-bold mb-4 font-mono text-sm">
-          <span className="text-amber-500">//</span> Bedienung
+          <span className="text-green-400">//</span> Bedienung
         </h2>
         <ul className="text-gray-400 text-sm space-y-2 font-mono">
           <li>→ Klick auf den Bildschirm aktiviert Tastatureingaben</li>
           <li>→ Klick außerhalb gibt die Maus wieder frei</li>
           <li>→ FreeDOS bootet automatisch nach dem Start</li>
-          <li>→ Eigene Disk-Images: Dateien in <code className="text-amber-400">frontend/public/v86/</code> ablegen</li>
+          <li>→ Eigene Disk-Images: Dateien in <code className="text-green-400">frontend/public/v86/</code> ablegen</li>
         </ul>
       </div>
     </div>

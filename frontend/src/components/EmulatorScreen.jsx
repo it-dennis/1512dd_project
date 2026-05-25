@@ -53,7 +53,7 @@ export default function EmulatorScreen() {
           <div className={`w-2 h-2 rounded-full ${
             status === 'ready' ? 'bg-green-500' :
             status === 'error' ? 'bg-red-500' :
-            'bg-amber-500 animate-pulse'
+            'bg-green-400 animate-pulse'
           }`} />
           <span className="font-mono text-sm text-gray-400">{statusLabel}</span>
         </div>

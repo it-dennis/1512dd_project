@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <span className="font-mono text-amber-500 animate-pulse">Booting...</span>
+        <span className="font-mono text-green-400 animate-pulse">Booting...</span>
       </div>
     );
   }
