@@ -1,0 +1,2 @@
+-- Datenbank wird über MYSQL_DATABASE Umgebungsvariable erstellt.
+-- Tabellen werden durch SQLAlchemy (Base.metadata.create_all) angelegt.
