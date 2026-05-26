@@ -31,7 +31,7 @@ Das Modell mit zwei Diskettenlaufwerken und Farbmonitor, das den Vätern dieser 
 In Deutschland wurden laut Schneider-Aktiv innerhalb weniger Monate **40.000 Geräte** verkauft. Lieferengpässe folgten.""",
     },
     {
-        "title": "Projekt „AIRO" – Die geheime Entstehungsgeschichte",
+        "title": 'Projekt „AIRO" – Die geheime Entstehungsgeschichte',
         "slug": "projekt-airo-entstehungsgeschichte",
         "category_slug": "geschichte",
         "excerpt": "Intern hieß das Projekt anders als offiziell. Die Geschichte hinter der Entwicklung des PC1512 – VLSI-Chips, ein abgelehnter BIOS-Auftrag und eine Abkürzung, über die Amstrad-Veteranen bis heute streiten.",
