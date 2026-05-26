@@ -60,6 +60,7 @@ class ArticleListOut(BaseModel):
     id: int
     title: str
     slug: str
+    body: str
     excerpt: Optional[str]
     category: Optional[CategoryOut]
     created_at: datetime

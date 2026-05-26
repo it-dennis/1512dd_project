@@ -33,12 +33,6 @@ export default function ArticleDetail() {
     );
   }
 
-  const date = new Date(article.created_at).toLocaleDateString('de-DE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       <Link to="/articles" className="text-green-400 hover:underline mb-8 inline-block font-mono text-sm">
@@ -51,14 +45,9 @@ export default function ArticleDetail() {
         </div>
       )}
 
-      <h1 className="text-4xl font-bold text-white mb-4 leading-tight">
+      <h1 className="text-4xl font-bold text-white mb-10 leading-tight">
         {article.title}
       </h1>
-
-      <div className="text-gray-500 font-mono text-sm mb-10 flex gap-4">
-        <span>{date}</span>
-        {article.author && <span>· {article.author.username}</span>}
-      </div>
 
       <div className="md-content">
         <ReactMarkdown>{article.body}</ReactMarkdown>

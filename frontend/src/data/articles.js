@@ -1,22 +1,11 @@
-from database import SessionLocal
-import models
-from auth import hash_password
-
-
-CATEGORIES = [
-    ("Hardware", "hardware"),
-    ("Software", "software"),
-    ("Geschichte", "geschichte"),
-    ("Spiele", "spiele"),
-]
-
-ARTICLES = [
-    {
-        "title": "Der Tag, an dem der PC erschwinglich wurde",
-        "slug": "der-tag-an-dem-der-pc-erschwinglich-wurde",
-        "category_slug": "geschichte",
-        "excerpt": "London, 2. September 1986: Alan Sugar nennt seinen Preis – und ein Raunen geht durch den Saal. £399 für einen IBM-kompatiblen PC.",
-        "body": """## London, 2. September 1986
+export const ARTICLES = [
+  {
+    slug: 'der-tag-an-dem-der-pc-erschwinglich-wurde',
+    title: 'Der Tag, an dem der PC erschwinglich wurde',
+    category: 'Geschichte',
+    date: '1986-09-02',
+    excerpt: 'London, 2. September 1986: Alan Sugar nennt seinen Preis – und ein Raunen geht durch den Saal. £399 für einen IBM-kompatiblen PC.',
+    body: `## London, 2. September 1986
 
 Queen Elizabeth Conference Centre, Westminster. Rund 1.200 Journalisten, Händler und Branchenvertreter waren gekommen – darunter Gäste aus Deutschland, Frankreich und Spanien mit Kopfhörern für Simultanübersetzung. Alan Sugar, Gründer von Amstrad, hatte monatelang geschwiegen. Kein Vorabbericht, keine Andeutung. Nur ein Termin.
 
@@ -28,14 +17,15 @@ Im Saal war für einen Moment Stille – dann ein Raunen der Verblüffung. Die Q
 
 Das Modell mit zwei Diskettenlaufwerken und Farbmonitor, das den Vätern dieser Seite auf dem Schreibtisch stand, kostete in Deutschland **2.999 DM** – deutlich günstiger als jede vergleichbare Maschine.
 
-In Deutschland wurden laut Schneider-Aktiv innerhalb weniger Monate **40.000 Geräte** verkauft. Lieferengpässe folgten.""",
-    },
-    {
-        "title": "Projekt „AIRO" – Die geheime Entstehungsgeschichte",
-        "slug": "projekt-airo-entstehungsgeschichte",
-        "category_slug": "geschichte",
-        "excerpt": "Intern hieß das Projekt anders als offiziell. Die Geschichte hinter der Entwicklung des PC1512 – VLSI-Chips, ein abgelehnter BIOS-Auftrag und eine Abkürzung, über die Amstrad-Veteranen bis heute streiten.",
-        "body": """## Ein Name, zwei Versionen
+In Deutschland wurden laut Schneider-Aktiv innerhalb weniger Monate **40.000 Geräte** verkauft. Lieferengpässe folgten.`,
+  },
+  {
+    slug: 'projekt-airo-entstehungsgeschichte',
+    title: 'Projekt „AIRO" – Die geheime Entstehungsgeschichte',
+    category: 'Geschichte',
+    date: '1985-09-01',
+    excerpt: 'Intern hieß das Projekt anders als offiziell. Die Geschichte hinter der Entwicklung des PC1512 – VLSI-Chips, ein abgelehnter BIOS-Auftrag und eine Abkürzung, über die Amstrad-Veteranen bis heute streiten.',
+    body: `## Ein Name, zwei Versionen
 
 Der offizielle Name war PC-1512. Intern hieß das Projekt anders.
 
@@ -53,14 +43,15 @@ Amstrad beauftragte **MEJ Electronics** mit der Nachentwicklung des IBM-BIOS –
 
 ## Kein Klon
 
-Das Ergebnis war kein Klon, sondern eine eigenständige Konstruktion: eigene VLSI-Chips, eigenes BIOS, sogar ein eigenes Tastaturprotokoll – absichtlich inkompatibel zum IBM-Standard.""",
-    },
-    {
-        "title": "Schneller als das Original – warum der 8086 einen Unterschied macht",
-        "slug": "schneller-als-das-original-8086",
-        "category_slug": "hardware",
-        "excerpt": "IBM verbaute aus Kostengründen den 8088. Der PC-1512 bekam den echten 16-Bit-Prozessor 8086 – und lief damit spürbar schneller als sein teures Vorbild.",
-        "body": """## Der Kompromiss im IBM PC
+Das Ergebnis war kein Klon, sondern eine eigenständige Konstruktion: eigene VLSI-Chips, eigenes BIOS, sogar ein eigenes Tastaturprotokoll – absichtlich inkompatibel zum IBM-Standard.`,
+  },
+  {
+    slug: 'schneller-als-das-original-8086',
+    title: 'Schneller als das Original – warum der 8086 einen Unterschied macht',
+    category: 'Hardware',
+    date: '1986-10-01',
+    excerpt: 'IBM verbaute aus Kostengründen den 8088. Der PC-1512 bekam den echten 16-Bit-Prozessor 8086 – und lief damit spürbar schneller als sein teures Vorbild.',
+    body: `## Der Kompromiss im IBM PC
 
 IBM hatte beim ersten PC-Modell 1981 den **Intel 8088** verbaut – aus Kostengründen. Der 8088 arbeitet zwar mit 16-Bit-Registern intern, hat aber nur einen 8-Bit-Datenbus: Er sendet Daten byteweise und ist dadurch langsamer als er könnte.
 
@@ -77,14 +68,15 @@ Und: Der 1512 lief spürbar schneller als sein teures Vorbild.
 ## Erweiterungsmöglichkeiten
 
 - Der Prozessor konnte gegen einen **NEC V30** ausgetauscht werden, der zusätzlich den 80186-Befehlssatz beherrschte.
-- Ein **Intel 8087 FPU**-Coprozessor für Fließkommaberechnungen ließ sich nachrüsten – ein Sockel dafür war bereits auf dem Mainboard vorgesehen.""",
-    },
-    {
-        "title": "GEM – die vergessene Benutzeroberfläche vor Windows",
-        "slug": "gem-vergessene-benutzeroberflaeche",
-        "category_slug": "software",
-        "excerpt": "1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Der PC-1512 brachte GEM mit – und für viele war es der erste Computer ohne Kommandozeile.",
-        "body": """## Ein Desktop im Wohnzimmer
+- Ein **Intel 8087 FPU**-Coprozessor für Fließkommaberechnungen ließ sich nachrüsten – ein Sockel dafür war bereits auf dem Mainboard vorgesehen.`,
+  },
+  {
+    slug: 'gem-vergessene-benutzeroberflaeche',
+    title: 'GEM – die vergessene Benutzeroberfläche vor Windows',
+    category: 'Software',
+    date: '1986-09-01',
+    excerpt: '1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Der PC-1512 brachte GEM mit – und für viele war es der erste Computer ohne Kommandozeile.',
+    body: `## Ein Desktop im Wohnzimmer
 
 1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Windows existierte, war aber bedeutungslos. Der Macintosh kostete ein Vermögen.
 
@@ -103,14 +95,15 @@ Der 1512 bekam also bereits die „entschärfte" Version – dennoch war sie fü
 - **GEM Desktop 2.0** – Dateimanager, Uhr, Taschenrechner, Screenshot-Funktion
 - **GEM Paint 1.0** – Malprogramm
 - **Locomotive BASIC 2** v1.12 – als GEM-integrierte IDE
-- **MS-DOS 3.2** und **DOS Plus 1.2** auf separaten Disketten""",
-    },
-    {
-        "title": "Digital Research – die andere Seite der DOS-Geschichte",
-        "slug": "digital-research-dos-geschichte",
-        "category_slug": "software",
-        "excerpt": "Gary Kildall erfand CP/M. IBM kam zu ihm – und die Verhandlungen scheiterten. Microsoft bekam den Auftrag. Und dann kam Amstrad.",
-        "body": """## Eine Geschichte, die anders hätte enden können
+- **MS-DOS 3.2** und **DOS Plus 1.2** auf separaten Disketten`,
+  },
+  {
+    slug: 'digital-research-dos-geschichte',
+    title: 'Digital Research – die andere Seite der DOS-Geschichte',
+    category: 'Software',
+    date: '1986-09-01',
+    excerpt: 'Gary Kildall erfand CP/M. IBM kam zu ihm – und die Verhandlungen scheiterten. Microsoft bekam den Auftrag. Und dann kam Amstrad.',
+    body: `## Eine Geschichte, die anders hätte enden können
 
 **Digital Research** – gegründet von Gary Kildall – hatte mit CP/M in den 1970ern das dominierende Betriebssystem für Heimcomputer geschaffen. Als IBM 1980 ein OS für den neuen PC suchte, kam man zu Kildall. Die Geschichte nahm eine Wendung: Die Verhandlungen scheiterten, IBM wandte sich an Microsoft – und der Rest ist bekannt.
 
@@ -122,14 +115,15 @@ Als Sugar Microsoft wegen einer DOS-Lizenz kontaktierte, war ihm der Preis zu ho
 
 ## Das Ende der Hoffnung
 
-Das Happy End blieb für Digital Research aus: Sugar entschied sich kurz vor dem Launch, auch **MS-DOS 3.2** beizulegen. Damit wurden beide Systeme zur Wahl gestellt – und MS-DOS gewann den Alltag.""",
-    },
-    {
-        "title": "Die Stille als Verkaufsargument",
-        "slug": "die-stille-als-verkaufsargument",
-        "category_slug": "hardware",
-        "excerpt": "Wer 1986 einen PC einschaltete, hörte ihn. Der PC-1512 war anders: kein Lüfter, kein Brummen. Das Netzteil steckte im Monitor – und das hatte Konsequenzen.",
-        "body": """## PCs, die man hörte
+Das Happy End blieb für Digital Research aus: Sugar entschied sich kurz vor dem Launch, auch **MS-DOS 3.2** beizulegen. Damit wurden beide Systeme zur Wahl gestellt – und MS-DOS gewann den Alltag.`,
+  },
+  {
+    slug: 'die-stille-als-verkaufsargument',
+    title: 'Die Stille als Verkaufsargument',
+    category: 'Hardware',
+    date: '1986-10-01',
+    excerpt: 'Wer 1986 einen PC einschaltete, hörte ihn. Der PC-1512 war anders: kein Lüfter, kein Brummen. Das Netzteil steckte im Monitor – und das hatte Konsequenzen.',
+    body: `## PCs, die man hörte
 
 Wer 1986 einen PC einschaltete, hörte ihn. Lüfter, surrende Festplatten, brummende Netzteile – PC-Lärm war normal.
 
@@ -145,14 +139,15 @@ Das proprietäre VLSI-Design produzierte weniger Abwärme als IBMs Einzelkompone
 
 ## Der Nachfolger
 
-Beim **PC 1640** (ECD-Modell, 1987) kehrte der Lüfter übrigens zurück – diesmal in den Monitor integriert. EGA-Grafik erzeugt mehr Wärme.""",
-    },
-    {
-        "title": "Was in der Schachtel steckte – das vollständige Paket",
-        "slug": "lieferumfang-das-vollstaendige-paket",
-        "category_slug": "hardware",
-        "excerpt": "Anders als IBM-Rechner war der PC-1512 ein Komplettsystem: Monitor, Maus, Software, Handbuch – alles dabei. Ein Überblick über den vollständigen Lieferumfang.",
-        "body": """## Ein System, nicht ein Bausatz
+Beim **PC 1640** (ECD-Modell, 1987) kehrte der Lüfter übrigens zurück – diesmal in den Monitor integriert. EGA-Grafik erzeugt mehr Wärme.`,
+  },
+  {
+    slug: 'lieferumfang-das-vollstaendige-paket',
+    title: 'Was in der Schachtel steckte – das vollständige Paket',
+    category: 'Hardware',
+    date: '1986-10-01',
+    excerpt: 'Anders als IBM-Rechner war der PC-1512 ein Komplettsystem: Monitor, Maus, Software, Handbuch – alles dabei. Ein Überblick über den vollständigen Lieferumfang.',
+    body: `## Ein System, nicht ein Bausatz
 
 Anders als IBM-Rechner, bei denen Monitor, Maus und Software separat gekauft werden mussten, war der Schneider PC-1512 ein Komplettsystem. Der Schneider-Aktiv-Bericht von 1986 listet den Inhalt detailliert auf.
 
@@ -183,14 +178,15 @@ Anders als IBM-Rechner, bei denen Monitor, Maus und Software separat gekauft wer
 
 ## Handbuch
 
-Ca. **700 Seiten** auf Deutsch.""",
-    },
-    {
-        "title": "Schneider – ein Name, zwei Firmen",
-        "slug": "schneider-ein-name-zwei-firmen",
-        "category_slug": "geschichte",
-        "excerpt": "In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Warum – und was das für Käufer bedeutete.",
-        "body": """## Ein britisches Gerät mit deutschem Namen
+Ca. **700 Seiten** auf Deutsch.`,
+  },
+  {
+    slug: 'schneider-ein-name-zwei-firmen',
+    title: 'Schneider – ein Name, zwei Firmen',
+    category: 'Geschichte',
+    date: '1986-09-01',
+    excerpt: 'In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Warum – und was das für Käufer bedeutete.',
+    body: `## Ein britisches Gerät mit deutschem Namen
 
 In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Das war kein Zufall, sondern Strategie.
 
@@ -209,14 +205,15 @@ Diese Konstruktion hatte Vorteile: Schneider verfügte über ein gut ausgebautes
 - **PC-1512 DD + Monochrommonitor** – 2.499 DM
 - **PC-1512 DD + Farbmonitor** – 2.999 DM
 - **Mit 10-MB-Festplatte** – ab 2.999 DM
-- **Mit 20-MB-Festplatte** – ab 3.999 DM""",
-    },
-    {
-        "title": "16 Farben bei 640×200 – der proprietäre Grafikmodus",
-        "slug": "16-farben-proprietaerer-grafikmodus",
-        "category_slug": "hardware",
-        "excerpt": "Standard-CGA bot 4 Farben bei 320×200 oder 2 Farben bei 640×200. Der PC-1512 konnte mehr – und das war kein IBM-Standard.",
-        "body": """## Die Grenzen von Standard-CGA
+- **Mit 20-MB-Festplatte** – ab 3.999 DM`,
+  },
+  {
+    slug: '16-farben-proprietaerer-grafikmodus',
+    title: '16 Farben bei 640×200 – der proprietäre Grafikmodus',
+    category: 'Hardware',
+    date: '1986-09-01',
+    excerpt: 'Standard-CGA bot 4 Farben bei 320×200 oder 2 Farben bei 640×200. Der PC-1512 konnte mehr – und das war kein IBM-Standard.',
+    body: `## Die Grenzen von Standard-CGA
 
 Standard-CGA-Grafik 1986: entweder 4 Farben bei 320×200 Pixeln, oder 2 Farben bei 640×200. Eine echte Einschränkung für alles, was scharf und bunt sein sollte.
 
@@ -233,14 +230,15 @@ Der Grafikausgang des Rechners war analog mit **Composite-Sync** – ein proprie
 ## Textdarstellung
 
 - 40×25 oder 80×25 Zeichen
-- Jeweils mit 16 Farben""",
-    },
-    {
-        "title": "Kompatibilität – was lief, was nicht",
-        "slug": "kompatibilitaet-was-lief-was-nicht",
-        "category_slug": "software",
-        "excerpt": "Schneider-Aktiv testete im September 1986 ausgiebig, was auf dem PC-1512 läuft. Das Ergebnis war beeindruckend – mit einer bekannten Ausnahme.",
-        "body": """## Der Praxistest
+- Jeweils mit 16 Farben`,
+  },
+  {
+    slug: 'kompatibilitaet-was-lief-was-nicht',
+    title: 'Kompatibilität – was lief, was nicht',
+    category: 'Software',
+    date: '1986-09-01',
+    excerpt: 'Schneider-Aktiv testete im September 1986 ausgiebig, was auf dem PC-1512 läuft. Das Ergebnis war beeindruckend – mit einer bekannten Ausnahme.',
+    body: `## Der Praxistest
 
 Schneider-Aktiv testete im September 1986 ausgiebig, was auf dem PC-1512 läuft. Das Ergebnis war beeindruckend – mit einer bekannten Ausnahme.
 
@@ -258,62 +256,10 @@ Die Inkompatibilität lag im **proprietären Tastaturprotokoll**: Eine Standard-
 
 ## Die ISA-Slots
 
-Drei ISA-Slots standen zur Verfügung – weniger als die 8 Slots mancher Konkurrenzrechner, aber laut Magazin ausreichend, da **Schnittstellen und Floppy-Controller bereits auf dem Mainboard integriert** waren.""",
-    },
-]
+Drei ISA-Slots standen zur Verfügung – weniger als die 8 Slots mancher Konkurrenzrechner, aber laut Magazin ausreichend, da **Schnittstellen und Floppy-Controller bereits auf dem Mainboard integriert** waren.`,
+  },
+];
 
-
-def run_seed():
-    db = SessionLocal()
-    try:
-        # Admin-User anlegen falls nicht vorhanden
-        admin = db.query(models.User).filter(models.User.email == "admin@pc1512.local").first()
-        if not admin:
-            admin = models.User(
-                email="admin@pc1512.local",
-                username="admin",
-                password_hash=hash_password("admin1512"),
-                is_admin=True,
-                is_verified=True,
-            )
-            db.add(admin)
-            db.flush()
-        elif not admin.is_verified:
-            admin.is_verified = True
-
-        # Kategorien anlegen falls nicht vorhanden
-        cat_map = {}
-        for name, slug in CATEGORIES:
-            cat = db.query(models.Category).filter(models.Category.slug == slug).first()
-            if not cat:
-                cat = models.Category(name=name, slug=slug)
-                db.add(cat)
-                db.flush()
-            cat_map[slug] = cat.id
-
-        # Artikel upserten (anlegen oder aktualisieren)
-        for a in ARTICLES:
-            existing = db.query(models.Article).filter(models.Article.slug == a["slug"]).first()
-            if existing:
-                existing.title = a["title"]
-                existing.body = a["body"]
-                existing.excerpt = a["excerpt"]
-                existing.category_id = cat_map.get(a["category_slug"])
-            else:
-                article = models.Article(
-                    title=a["title"],
-                    slug=a["slug"],
-                    body=a["body"],
-                    excerpt=a["excerpt"],
-                    category_id=cat_map.get(a["category_slug"]),
-                    author_id=admin.id,
-                )
-                db.add(article)
-
-        db.commit()
-        print("Seed-Daten erfolgreich eingespielt.")
-    except Exception as e:
-        db.rollback()
-        print(f"Seed fehlgeschlagen: {e}")
-    finally:
-        db.close()
+export function getArticleBySlug(slug) {
+  return ARTICLES.find(a => a.slug === slug) ?? null;
+}
