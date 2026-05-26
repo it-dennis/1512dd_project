@@ -83,7 +83,7 @@ Und: Der 1512 lief spürbar schneller als sein teures Vorbild.
         "title": "GEM – die vergessene Benutzeroberfläche vor Windows",
         "slug": "gem-vergessene-benutzeroberflaeche",
         "category_slug": "software",
-        "excerpt": "1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Der PC-1512 brachte GEM mit – und für viele war es der erste Computer ohne Kommandozeile.",
+        "excerpt": '1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Der PC-1512 brachte GEM mit – und für viele war es der erste Computer ohne Kommandozeile.',
         "body": """## Ein Desktop im Wohnzimmer
 
 1986 kannte kaum jemand in deutschen Wohnzimmern das Wort „grafische Benutzeroberfläche". Windows existierte, war aber bedeutungslos. Der Macintosh kostete ein Vermögen.
@@ -189,7 +189,7 @@ Ca. **700 Seiten** auf Deutsch.""",
         "title": "Schneider – ein Name, zwei Firmen",
         "slug": "schneider-ein-name-zwei-firmen",
         "category_slug": "geschichte",
-        "excerpt": "In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Warum – und was das für Käufer bedeutete.",
+        "excerpt": 'In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Warum – und was das für Käufer bedeutete.',
         "body": """## Ein britisches Gerät mit deutschem Namen
 
 In Deutschland hieß das Gerät nicht „Amstrad", sondern „Schneider". Das war kein Zufall, sondern Strategie.
