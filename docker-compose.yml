@@ -6,8 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-pc1512dev}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-pc1512}
-    ports:
-      - "3306:3306"
+    # ports:
+    #  - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/01_init.sql
