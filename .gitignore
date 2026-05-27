@@ -28,6 +28,9 @@ Thumbs.db
 *.txt
 *.odt
 *.odt#
+PROJEKTPLAN.md
+PROJEKTÜBERSICHT.md
+
 
 # IDE
 .vscode/
