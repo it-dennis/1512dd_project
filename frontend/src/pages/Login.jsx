@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto px-4 py-24">
       <h1 className="text-3xl font-bold text-white mb-2">Login</h1>
-      <p className="text-gray-400 mb-8 font-mono text-sm">
+      <p className="mb-8 font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
         Einloggen um den Emulator zu starten.
       </p>
 
@@ -42,7 +42,7 @@ export default function Login() {
           </div>
         )}
         <div>
-          <label className="text-gray-400 text-sm font-mono block mb-2">E-Mail</label>
+          <label className="font-mono text-sm block mb-2" style={{ color: 'rgba(170,255,204,0.60)' }}>E-Mail</label>
           <input
             type="email"
             value={email}
@@ -53,7 +53,7 @@ export default function Login() {
           />
         </div>
         <div>
-          <label className="text-gray-400 text-sm font-mono block mb-2">Passwort</label>
+          <label className="font-mono text-sm block mb-2" style={{ color: 'rgba(170,255,204,0.60)' }}>Passwort</label>
           <input
             type="password"
             value={password}
@@ -68,9 +68,9 @@ export default function Login() {
         </button>
       </form>
 
-      <p className="text-gray-500 font-mono text-sm mt-6 text-center">
+      <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>
         Noch kein Konto?{' '}
-        <Link to="/register" className="text-green-400 hover:underline">
+        <Link to="/register" className="text-phosphor hover:underline">
           Registrieren
         </Link>
       </p>

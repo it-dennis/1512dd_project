@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 780" width="600" height="780" role="img" aria-label="1512dd light bg variant">
+  <title>1512dd — Light Bg</title>
+  <defs>
+    
+    <linearGradient id="beamYL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1ea758" stop-opacity=".5"></stop>
+      <stop offset="60%" stop-color="#1ea758" stop-opacity=".25"></stop>
+      <stop offset="100%" stop-color="#1ea758" stop-opacity=".05"></stop>
+    </linearGradient>
+    <radialGradient id="poolGradL"><stop offset="0%" stop-color="#1ea758" stop-opacity=".4"></stop><stop offset="100%" stop-color="#1ea758" stop-opacity="0"></stop></radialGradient>
+    <filter id="softL"><feGaussianBlur stdDeviation="1.4"></feGaussianBlur></filter>
+    <filter id="poolBlurL"><feGaussianBlur stdDeviation="3"></feGaussianBlur></filter>
+    <filter id="haloBlurL"><feGaussianBlur stdDeviation="6"></feGaussianBlur></filter>
+    <symbol id="pcDark" viewBox="0 0 200 200">
+      <g fill="#0a1f15">
+        <path d="M40,22 C40,14 46,10 56,10 L144,10 C154,10 160,14 160,22 L162,118 C162,126 156,130 146,130 L54,130 C44,130 38,126 38,118 Z"></path>
+        <rect x="74" y="132" width="52" height="4" rx="1" fill="#e8f5ee"></rect>
+        <rect x="10" y="140" width="180" height="50" rx="5"></rect>
+        <rect x="30" y="158" width="62" height="14" rx="1.5" fill="#e8f5ee"></rect>
+        <rect x="108" y="158" width="62" height="14" rx="1.5" fill="#e8f5ee"></rect>
+        <rect x="34" y="160" width="14" height="10"></rect>
+        <rect x="112" y="160" width="14" height="10"></rect>
+      </g>
+      <rect x="52" y="24" width="96" height="84" rx="10" fill="#1ea758"></rect>
+      <g fill="#aaffcc">
+        <rect x="60" y="36" width="34" height="3"></rect>
+        <rect x="60" y="44" width="58" height="3"></rect>
+        <rect x="60" y="52" width="46" height="3"></rect>
+        <rect x="60" y="60" width="62" height="3"></rect>
+        <rect x="60" y="68" width="28" height="3"></rect>
+        <rect x="60" y="80" width="6" height="6"></rect>
+      </g>
+    </symbol>
+    <symbol id="sparkleD" viewBox="-50 -50 100 100" overflow="visible">
+      <path d="M 0,-50 C 5,-14 14,-5 50,0 C 14,5 5,14 0,50 C -5,14 -14,5 -50,0 C -14,-5 -5,-14 0,-50 Z" fill="#0a1f15"></path>
+    </symbol>
+  </defs>
+  <rect width="600" height="780" fill="#e8f5ee"></rect>
+  <ellipse cx="300" cy="555" rx="265" ry="48" fill="url(#poolGradL)" filter="url(#poolBlurL)"></ellipse>
+  <path d="M 252,128 A 48,11 0 0,0 348,128 L 540,548 A 245,42 0 0,1 60,548 L 252,128 Z" fill="url(#beamYL)" filter="url(#softL)"></path>
+  <circle cx="300" cy="92" r="60" fill="#1ea758" fill-opacity=".3" filter="url(#haloBlurL)"></circle>
+  <use href="#sparkleD" x="270" y="62" width="60" height="60"></use>
+  <use href="#pcDark" x="208" y="335" width="184" height="220"></use>
+  <text class="wm" x="300" y="665" text-anchor="middle">1512dd</text>
+  <text class="sub" x="310" y="720" text-anchor="middle">EMULATOR</text>
+</svg>

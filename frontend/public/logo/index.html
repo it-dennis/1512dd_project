@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>1512dd — Brand Package</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Major+Mono+Display&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07100b; --panel:#0d1b13; --panel-2:#0a1610; --line:#1a2e22;
+    --label:#5a8a6f; --label-dim:#3a5a47;
+    --phos:#39ff7a; --phos-soft:#aaffcc; --phos-dim:#1ea758;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:#cfe9d8;font-family:"JetBrains Mono",ui-monospace,monospace;}
+  body{padding:48px 56px 96px;}
+
+  .hdr{max-width:1280px;margin:0 auto 56px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;}
+  .hdr-text .eyebrow{font-family:"Share Tech Mono",monospace;color:var(--label);letter-spacing:.28em;text-transform:uppercase;font-size:11px;margin-bottom:14px;}
+  .hdr-text h1{font-family:"Major Mono Display",monospace;font-weight:400;font-size:42px;letter-spacing:.04em;margin:0 0 14px;color:var(--phos);}
+  .hdr-text p{margin:0;line-height:1.7;color:#9ec0ae;font-size:13px;}
+  .hdr-text .meta{margin-top:22px;display:flex;gap:24px;flex-wrap:wrap;font-size:11px;color:var(--label-dim);font-family:"Share Tech Mono",monospace;letter-spacing:.18em;text-transform:uppercase;}
+  .hdr-text .meta span::before{content:"// ";color:var(--label);}
+  .hdr-mini{
+    background:#000;border:1px solid var(--line);border-radius:6px;
+    aspect-ratio: 16/9; overflow:hidden;position:relative;
+  }
+  .hdr-mini img{width:100%;height:100%;object-fit:cover;display:block;}
+
+  .section{max-width:1280px;margin:0 auto 56px;}
+  .section-head{display:flex;align-items:baseline;gap:18px;margin-bottom:22px;border-bottom:1px dashed var(--line);padding-bottom:14px;}
+  .section-head .num{font-family:"Share Tech Mono",monospace;color:var(--phos-dim);font-size:12px;letter-spacing:.2em;}
+  .section-head h2{margin:0;font-family:"Share Tech Mono",monospace;font-weight:400;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:#d8efe2;}
+  .section-head .count{margin-left:auto;color:var(--label);font-size:11px;font-family:"Share Tech Mono",monospace;letter-spacing:.12em;}
+
+  .grid{display:grid;gap:18px;}
+  .g-2{grid-template-columns:repeat(2,1fr);}
+  .g-3{grid-template-columns:repeat(3,1fr);}
+  .g-4{grid-template-columns:repeat(4,1fr);}
+  .g-6{grid-template-columns:repeat(6,1fr);}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .card .stage{
+    background:#000;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+  }
+  .stage.checker{
+    background-image:
+      linear-gradient(45deg, #0d1b13 25%, transparent 25%),
+      linear-gradient(-45deg, #0d1b13 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #0d1b13 75%),
+      linear-gradient(-45deg, transparent 75%, #0d1b13 75%);
+    background-size:16px 16px;
+    background-position:0 0, 0 8px, 8px -8px, -8px 0;
+    background-color:#000;
+  }
+  .stage::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(to bottom, rgba(57,255,122,0.04) 0 1px, transparent 1px 3px);
+    mix-blend-mode:screen;
+  }
+  .stage img{display:block;max-width:88%;max-height:88%;object-fit:contain;}
+
+  .ar-11 .stage{aspect-ratio:1/1;}
+  .ar-43 .stage{aspect-ratio:4/3;}
+  .ar-169 .stage{aspect-ratio:16/9;}
+  .ar-48 .stage{aspect-ratio:48/10;}  /* wide banner */
+  .ar-og  .stage{aspect-ratio:1200/630;}
+
+  .card .meta{padding:13px 16px;display:flex;flex-direction:column;gap:6px;}
+  .card .meta .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .card .meta .name{font-family:"Share Tech Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#d8efe2;}
+  .card .meta .size{font-family:"Share Tech Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--label-dim);}
+  .card .meta .desc{font-size:11px;color:var(--label);font-family:"Share Tech Mono",monospace;letter-spacing:.06em;line-height:1.5;}
+  .card .meta .dl{display:flex;gap:6px;margin-top:8px;}
+  .card .meta .dl a{
+    flex:1;padding:7px 10px;border:1px solid var(--phos-dim);color:var(--phos);
+    text-decoration:none;font-family:"Share Tech Mono",monospace;
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-align:center;
+    border-radius:3px;transition:.15s;
+  }
+  .card .meta .dl a:hover{background:var(--phos);color:#000;border-color:var(--phos);}
+  .card .meta .dl a.sec{color:var(--label);border-color:var(--line);}
+  .card .meta .dl a.sec:hover{background:var(--label);color:#000;border-color:var(--label);}
+
+  /* favicon cards: small thumb on top */
+  .fav-thumb{display:flex;align-items:center;justify-content:center;gap:8px;}
+  .fav-thumb img{image-rendering:pixelated;}
+
+  /* color palette swatches */
+  .palette{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  .swatch{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:14px;display:flex;flex-direction:column;gap:10px;
+  }
+  .swatch .chip{aspect-ratio:1/1;border-radius:4px;border:1px solid var(--line);}
+  .swatch .name{font-family:"Share Tech Mono",monospace;font-size:11px;color:#d8efe2;letter-spacing:.1em;}
+  .swatch .hex{font-family:"Share Tech Mono",monospace;font-size:10px;color:var(--label);letter-spacing:.1em;}
+
+  /* type sample */
+  .typebox{
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:24px 28px;display:flex;flex-direction:column;gap:18px;
+  }
+  .type-row{display:flex;align-items:baseline;gap:24px;border-bottom:1px dashed var(--line);padding-bottom:14px;}
+  .type-row:last-child{border-bottom:none;padding-bottom:0;}
+  .type-row .label{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--label);letter-spacing:.16em;text-transform:uppercase;flex:0 0 130px;}
+  .type-row .sample{color:#cfe9d8;}
+  .type-major{font-family:'Major Mono Display',monospace;font-size:54px;color:var(--phos);letter-spacing:4px;}
+  .type-share{font-family:'Share Tech Mono',monospace;font-size:22px;color:var(--phos-soft);letter-spacing:6px;}
+
+  .download-box{
+    max-width:1280px;margin:64px auto 0;padding:24px 28px;
+    background:var(--panel-2);border:1px solid var(--phos-dim);border-radius:6px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .download-box .left h3{margin:0 0 6px;font-family:"Share Tech Mono",monospace;color:var(--phos);font-size:14px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;}
+  .download-box .left p{margin:0;color:var(--label);font-size:12px;font-family:"Share Tech Mono",monospace;letter-spacing:.08em;}
+
+  .footer{
+    max-width:1280px;margin:48px auto 0;color:var(--label-dim);
+    font-family:"Share Tech Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    border-top:1px dashed var(--line);padding-top:18px;
+    display:flex;justify-content:space-between;
+  }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-text">
+    <div class="eyebrow">Brand Package · v1.0</div>
+    <h1>1512dd // emulator</h1>
+    <p>Komplettes, professionelles Logo-Paket für den Emulator. Vektor-Master in allen wichtigen Formaten, dazu Raster für Web, Social und Favicons. Markenfreier Originalentwurf — basierend auf der charakteristischen Silhouette eines Twin-Floppy-Desktop-PCs der 80er, in Phosphor-Grün auf CRT-Schwarz.</p>
+    <div class="meta">
+      <span>name · 1512dd</span>
+      <span>files · 18</span>
+      <span>vector + raster · ready to ship</span>
+    </div>
+  </div>
+  <div class="hdr-mini">
+    <img src="banner.png" alt="1512dd banner preview">
+  </div>
+</header>
+
+<!-- ============ 01 LOGO MASTERS ============ -->
+<section class="section">
+  <div class="section-head">
+    <span class="num">01 /</span>
+    <h2>Logo Masters</h2>
+    <span class="count">5 files · SVG</span>
+  </div>
+  <div class="grid g-3">
+
+    <div class="card ar-43">
+      <div class="stage"><img src="1512dd-primary.svg" alt="Primary lockup"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Primary</span><span class="size">600×780</span></div>
+        <span class="desc">Vertical lockup · hero file</span>
+        <div class="dl"><a href="1512dd-primary.svg" download>SVG</a></div>
+      </div>
+    </div>
+
+    <div class="card ar-169">
+      <div class="stage"><img src="1512dd-horizontal.svg" alt="Horizontal lockup"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Horizontal</span><span class="size">1280×720</span></div>
+        <span class="desc">Icon left · wordmark right</span>
+        <div class="dl"><a href="1512dd-horizontal.svg" download>SVG</a></div>
+      </div>
+    </div>
+
+    <div class="card ar-11">
+      <div class="stage"><img src="1512dd-app-icon.svg" alt="App icon"></div>
+      <div class="meta">
+        <div class="row"><span class="name">App Icon</span><span class="size">600×600</span></div>
+        <span class="desc">Square · with wordmark</span>
+        <div class="dl"><a href="1512dd-app-icon.svg" download>SVG</a></div>
+      </div>
+    </div>
+
+    <div class="card ar-11">
+      <div class="stage"><img src="1512dd-icon-only.svg" alt="Icon only"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Icon Only</span><span class="size">600×600</span></div>
+        <span class="desc">Square · no text · drop-in glyph</span>
+        <div class="dl"><a href="1512dd-icon-only.svg" download>SVG</a></div>
+      </div>
+    </div>
+
+    <div class="card ar-43">
+      <div class="stage" style="background:#e8f5ee;"><img src="1512dd-mono-light.svg" alt="Light bg variant"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Light Bg</span><span class="size">600×780</span></div>
+        <span class="desc">Knock-out · merch / print</span>
+        <div class="dl"><a href="1512dd-mono-light.svg" download>SVG</a></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 02 WEB / SOCIAL ============ -->
+<section class="section">
+  <div class="section-head">
+    <span class="num">02 /</span>
+    <h2>Web · Social · Banner</h2>
+    <span class="count">6 files · SVG + PNG</span>
+  </div>
+
+  <div class="grid g-2" style="margin-bottom:18px;">
+    <div class="card ar-48">
+      <div class="stage"><img src="banner.png" alt="Banner"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Wide Banner</span><span class="size">1920×400</span></div>
+        <span class="desc">Site header · README hero</span>
+        <div class="dl"><a href="1512dd-banner.svg" download>SVG</a><a class="sec" href="banner.png" download>PNG</a></div>
+      </div>
+    </div>
+
+    <div class="card ar-og">
+      <div class="stage"><img src="og-image.png" alt="OG Image"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Open Graph</span><span class="size">1200×630</span></div>
+        <span class="desc">og:image · Twitter Card · Linkpreview</span>
+        <div class="dl"><a href="1512dd-og-image.svg" download>SVG</a><a class="sec" href="og-image.png" download>PNG</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g-3">
+    <div class="card ar-11">
+      <div class="stage"><img src="social-1080.png" alt="Social square"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Social Square</span><span class="size">1080×1080</span></div>
+        <span class="desc">Instagram · LinkedIn · Facebook</span>
+        <div class="dl"><a href="1512dd-social.svg" download>SVG</a><a class="sec" href="social-1080.png" download>PNG</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 APP ICONS (Raster) ============ -->
+<section class="section">
+  <div class="section-head">
+    <span class="num">03 /</span>
+    <h2>App Icons · PWA · iOS</h2>
+    <span class="count">3 files · PNG</span>
+  </div>
+  <div class="grid g-3">
+    <div class="card ar-11">
+      <div class="stage"><img src="apple-touch-icon-180.png" alt="Apple Touch Icon" style="image-rendering:auto;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">Apple Touch</span><span class="size">180×180</span></div>
+        <span class="desc">iOS home-screen · Safari</span>
+        <div class="dl"><a href="apple-touch-icon-180.png" download>PNG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="icon-192.png" alt="PWA 192"></div>
+      <div class="meta">
+        <div class="row"><span class="name">PWA · Android</span><span class="size">192×192</span></div>
+        <span class="desc">Manifest icon · home-screen</span>
+        <div class="dl"><a href="icon-192.png" download>PNG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="icon-512.png" alt="PWA 512"></div>
+      <div class="meta">
+        <div class="row"><span class="name">PWA · Splash</span><span class="size">512×512</span></div>
+        <span class="desc">Splash screen · Store listing</span>
+        <div class="dl"><a href="icon-512.png" download>PNG</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 FAVICONS ============ -->
+<section class="section">
+  <div class="section-head">
+    <span class="num">04 /</span>
+    <h2>Favicons</h2>
+    <span class="count">5 files · SVG + PNG</span>
+  </div>
+  <div class="grid g-6">
+    <div class="card ar-11">
+      <div class="stage"><img src="favicon.svg" alt="favicon svg" style="width:60%;height:60%;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">favicon</span><span class="size">SVG</span></div>
+        <span class="desc">Modern browsers</span>
+        <div class="dl"><a href="favicon.svg" download>SVG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="favicon-16.png" alt="favicon 16" style="image-rendering:pixelated;width:128px;height:128px;max-width:80%;max-height:80%;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">favicon</span><span class="size">16×16</span></div>
+        <span class="desc">Classic tab icon</span>
+        <div class="dl"><a href="favicon-16.png" download>PNG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="favicon-32.png" alt="favicon 32" style="image-rendering:pixelated;width:128px;height:128px;max-width:80%;max-height:80%;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">favicon</span><span class="size">32×32</span></div>
+        <span class="desc">High-DPI tab</span>
+        <div class="dl"><a href="favicon-32.png" download>PNG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="favicon-48.png" alt="favicon 48" style="image-rendering:pixelated;width:144px;height:144px;max-width:80%;max-height:80%;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">favicon</span><span class="size">48×48</span></div>
+        <span class="desc">Windows taskbar</span>
+        <div class="dl"><a href="favicon-48.png" download>PNG</a></div>
+      </div>
+    </div>
+    <div class="card ar-11">
+      <div class="stage"><img src="favicon-64.png" alt="favicon 64" style="image-rendering:pixelated;width:160px;height:160px;max-width:80%;max-height:80%;"></div>
+      <div class="meta">
+        <div class="row"><span class="name">favicon</span><span class="size">64×64</span></div>
+        <span class="desc">macOS launcher</span>
+        <div class="dl"><a href="favicon-64.png" download>PNG</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 BRAND SYSTEM ============ -->
+<section class="section">
+  <div class="section-head">
+    <span class="num">05 /</span>
+    <h2>Brand System</h2>
+    <span class="count">color · type</span>
+  </div>
+
+  <div class="palette" style="margin-bottom:22px;">
+    <div class="swatch"><div class="chip" style="background:#39FF7A;"></div><span class="name">Phosphor</span><span class="hex">#39FF7A</span></div>
+    <div class="swatch"><div class="chip" style="background:#AAFFCC;"></div><span class="name">Soft Phosphor</span><span class="hex">#AAFFCC</span></div>
+    <div class="swatch"><div class="chip" style="background:#1EA758;"></div><span class="name">Muted Green</span><span class="hex">#1EA758</span></div>
+    <div class="swatch"><div class="chip" style="background:#031A10;"></div><span class="name">Screen Dark</span><span class="hex">#031A10</span></div>
+    <div class="swatch"><div class="chip" style="background:#000000;"></div><span class="name">CRT Black</span><span class="hex">#000000</span></div>
+    <div class="swatch"><div class="chip" style="background:#E8F5EE;border:1px solid var(--line);"></div><span class="name">Paper</span><span class="hex">#E8F5EE</span></div>
+  </div>
+
+  <div class="typebox">
+    <div class="type-row">
+      <span class="label">Wordmark</span>
+      <span class="sample type-major">1512dd</span>
+      <span class="label" style="margin-left:auto;text-align:right;">Major Mono Display</span>
+    </div>
+    <div class="type-row">
+      <span class="label">Subtitle</span>
+      <span class="sample type-share">EMULATOR</span>
+      <span class="label" style="margin-left:auto;text-align:right;">Share Tech Mono</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOWNLOAD ALL ============ -->
+<div class="download-box">
+  <div class="left">
+    <h3>// Komplettes Paket</h3>
+    <p>Alle 18 Dateien + README in einem ZIP — siehe Download-Karte oben im Chat.</p>
+  </div>
+</div>
+
+<footer class="footer">
+  <span>// 1512dd · brand package · v1.0</span>
+  <span>// markenfrei · originalentwurf</span>
+</footer>
+
+</body>
+</html>

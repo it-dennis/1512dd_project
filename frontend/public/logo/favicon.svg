@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="1512dd">
+  <title>1512dd</title>
+  <defs>
+    <linearGradient id="bm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#39ff7a" stop-opacity=".6"></stop>
+      <stop offset="100%" stop-color="#39ff7a" stop-opacity=".15"></stop>
+    </linearGradient>
+    <radialGradient id="hl"><stop offset="0%" stop-color="#aaffcc" stop-opacity=".9"></stop><stop offset="100%" stop-color="#39ff7a" stop-opacity="0"></stop></radialGradient>
+  </defs>
+  
+  <rect width="64" height="64" rx="10" fill="#000"></rect>
+  
+  <circle cx="32" cy="10" r="10" fill="url(#hl)"></circle>
+  
+  <path d="M32,2 C33,8 35,10 41,11 C35,12 33,14 32,20 C31,14 29,12 23,11 C29,10 31,8 32,2 Z" fill="#fff"></path>
+  
+  <path d="M 27,16 L 54,52 L 10,52 L 37,16 Z" fill="url(#bm)"></path>
+  
+  <g fill="#39ff7a">
+    
+    <rect x="18" y="22" width="28" height="22" rx="3"></rect>
+    
+    <rect x="21" y="25" width="22" height="16" rx="2" fill="#031a10"></rect>
+    
+    <rect x="23" y="28" width="8" height="1.4" fill="#39ff7a"></rect>
+    <rect x="23" y="31" width="12" height="1.4" fill="#39ff7a"></rect>
+    <rect x="23" y="34" width="6" height="1.4" fill="#39ff7a"></rect>
+    <rect x="23" y="37" width="14" height="1.4" fill="#39ff7a"></rect>
+    
+    <rect x="28" y="45" width="8" height="1" fill="#000"></rect>
+    
+    <rect x="10" y="47" width="44" height="10" rx="1.5"></rect>
+    <rect x="14" y="50" width="14" height="4" rx="0.5" fill="#000"></rect>
+    <rect x="36" y="50" width="14" height="4" rx="0.5" fill="#000"></rect>
+    <rect x="15" y="51" width="3" height="2"></rect>
+    <rect x="37" y="51" width="3" height="2"></rect>
+  </g>
+</svg>

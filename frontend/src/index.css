@@ -4,23 +4,23 @@
 
 @layer base {
   body {
-    @apply bg-gray-950 text-white font-mono text-sm antialiased;
+    @apply bg-crt-black text-phosphor font-mono text-sm antialiased;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 bg-[#00FF41] text-black font-bold rounded hover:bg-[#00FF41] transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-4 py-2 bg-phosphor text-black font-bold rounded hover:bg-phosphor-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
-    @apply px-4 py-2 border border-[#00FF41] text-[#00FF41] font-mono rounded hover:bg-[#00FF41] hover:text-black transition-colors;
+    @apply px-4 py-2 border border-phosphor text-phosphor font-mono rounded hover:bg-phosphor hover:text-black transition-colors;
   }
   .card {
-    @apply bg-gray-900 border border-gray-800 rounded-lg p-6;
+    @apply bg-crt-ink border border-phosphor-muted/20 rounded-lg p-6;
   }
   .input-field {
-    @apply w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white font-mono
-           focus:outline-none focus:border-[#00FF41] transition-colors;
+    @apply w-full bg-crt-dark border border-phosphor-muted/40 rounded px-3 py-2 text-phosphor font-mono
+           focus:outline-none focus:border-phosphor transition-colors;
   }
 }
 
@@ -32,22 +32,25 @@
   @apply text-xl font-bold text-white mt-6 mb-3;
 }
 .md-content p {
-  @apply text-gray-300 leading-relaxed mb-4;
+  @apply leading-relaxed mb-4;
+  color: rgba(170, 255, 204, 0.75);
 }
 .md-content ul {
-  @apply list-disc list-inside text-gray-300 mb-4 space-y-1 ml-2;
+  @apply list-disc list-inside mb-4 space-y-1 ml-2;
+  color: rgba(170, 255, 204, 0.75);
 }
 .md-content li {
   @apply leading-relaxed;
 }
 .md-content code {
-  @apply font-mono bg-gray-800 text-[#00FF41] px-1 rounded text-sm;
+  @apply font-mono bg-crt-dark text-phosphor px-1 rounded text-sm;
 }
 .md-content pre {
-  @apply bg-gray-800 rounded p-4 mb-4 overflow-x-auto;
+  @apply bg-crt-dark rounded p-4 mb-4 overflow-x-auto;
 }
 .md-content pre code {
-  @apply bg-transparent px-0 text-gray-300;
+  @apply bg-transparent px-0;
+  color: rgba(170, 255, 204, 0.75);
 }
 .md-content strong {
   @apply text-white font-bold;

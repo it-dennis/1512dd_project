@@ -51,18 +51,18 @@ export default function EmulatorScreen() {
       {statusLabel && (
         <div className="flex items-center gap-2 self-start">
           <div className={`w-2 h-2 rounded-full ${
-            status === 'ready' ? 'bg-green-500' :
+            status === 'ready' ? 'bg-phosphor' :
             status === 'error' ? 'bg-red-500' :
-            'bg-green-400 animate-pulse'
+            'bg-phosphor animate-pulse'
           }`} />
-          <span className="font-mono text-sm text-gray-400">{statusLabel}</span>
+          <span className="font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>{statusLabel}</span>
         </div>
       )}
 
       {/* Screen container — v86 requires exactly: first a div (text mode), then a canvas (VGA) */}
       <div
         ref={screenRef}
-        className="border border-gray-700 rounded bg-black w-full"
+        className="border border-phosphor-muted/30 rounded bg-crt-black w-full"
         style={{ minHeight: started ? '400px' : '0' }}
       >
         <div style={{ whiteSpace: 'pre', font: '14px monospace', lineHeight: '14px' }} />
@@ -77,7 +77,7 @@ export default function EmulatorScreen() {
       )}
 
       {started && status === 'ready' && (
-        <p className="text-gray-600 font-mono text-xs">
+        <p className="font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>
           Klick auf den Bildschirm um Tastatureingaben zu aktivieren · F11 = Vollbild
         </p>
       )}

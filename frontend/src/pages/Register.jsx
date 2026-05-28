@@ -28,18 +28,18 @@ export default function Register() {
   return (
     <div className="max-w-md mx-auto px-4 py-24">
       <h1 className="text-3xl font-bold text-white mb-2">Registrieren</h1>
-      <p className="text-gray-400 mb-8 font-mono text-sm">
+      <p className="mb-8 font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
         Konto erstellen um den Emulator zu nutzen.
       </p>
 
       {success ? (
         <div className="card">
-          <div className="text-green-400 font-mono text-sm bg-green-950/30 border border-green-800 rounded p-4">
+          <div className="text-phosphor font-mono text-sm bg-crt-dark/60 border border-phosphor-muted rounded p-4">
             <p className="font-bold mb-1">Konto erstellt!</p>
-            <p className="text-green-300/80">{success}</p>
+            <p style={{ color: 'rgba(170,255,204,0.75)' }}>{success}</p>
           </div>
-          <p className="text-gray-500 font-mono text-sm mt-6 text-center">
-            <Link to="/login" className="text-green-400 hover:underline">
+          <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>
+            <Link to="/login" className="text-phosphor hover:underline">
               Zum Login
             </Link>
           </p>
@@ -52,7 +52,7 @@ export default function Register() {
             </div>
           )}
           <div>
-            <label className="text-gray-400 text-sm font-mono block mb-2">E-Mail</label>
+            <label className="font-mono text-sm block mb-2" style={{ color: 'rgba(170,255,204,0.60)' }}>E-Mail</label>
             <input
               type="email"
               value={email}
@@ -63,7 +63,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="text-gray-400 text-sm font-mono block mb-2">Benutzername</label>
+            <label className="font-mono text-sm block mb-2" style={{ color: 'rgba(170,255,204,0.60)' }}>Benutzername</label>
             <input
               type="text"
               value={username}
@@ -75,7 +75,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="text-gray-400 text-sm font-mono block mb-2">Passwort</label>
+            <label className="font-mono text-sm block mb-2" style={{ color: 'rgba(170,255,204,0.60)' }}>Passwort</label>
             <input
               type="password"
               value={password}
@@ -85,7 +85,7 @@ export default function Register() {
               autoComplete="new-password"
               className="input-field"
             />
-            <p className="text-gray-600 text-xs font-mono mt-1">Mindestens 8 Zeichen</p>
+            <p className="font-mono text-xs mt-1" style={{ color: 'rgba(30,167,88,0.50)' }}>Mindestens 8 Zeichen</p>
           </div>
           <button type="submit" disabled={loading} className="btn-primary w-full py-3">
             {loading ? 'Konto wird erstellt...' : 'Konto erstellen'}
@@ -94,9 +94,9 @@ export default function Register() {
       )}
 
       {!success && (
-        <p className="text-gray-500 font-mono text-sm mt-6 text-center">
+        <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>
           Schon ein Konto?{' '}
-          <Link to="/login" className="text-green-400 hover:underline">
+          <Link to="/login" className="text-phosphor hover:underline">
             Login
           </Link>
         </p>

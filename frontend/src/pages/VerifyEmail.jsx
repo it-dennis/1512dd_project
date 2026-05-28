@@ -30,19 +30,19 @@ export default function VerifyEmail() {
       <h1 className="text-3xl font-bold text-white mb-2">E-Mail bestätigen</h1>
 
       {status === 'loading' && (
-        <p className="text-gray-400 font-mono text-sm mt-8">Bestätigung wird verarbeitet...</p>
+        <p className="font-mono text-sm mt-8" style={{ color: 'rgba(170,255,204,0.60)' }}>Bestätigung wird verarbeitet...</p>
       )}
 
       {status === 'success' && (
         <>
           <div className="card mt-8">
-            <div className="text-green-400 font-mono text-sm bg-green-950/30 border border-green-800 rounded p-4">
+            <div className="text-phosphor font-mono text-sm bg-crt-dark/60 border border-phosphor-muted rounded p-4">
               <p className="font-bold mb-1">Erfolgreich bestätigt!</p>
-              <p className="text-green-300/80">{message}</p>
+              <p style={{ color: 'rgba(170,255,204,0.75)' }}>{message}</p>
             </div>
           </div>
-          <p className="text-gray-500 font-mono text-sm mt-6 text-center">
-            <Link to="/login" className="text-green-400 hover:underline">
+          <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>
+            <Link to="/login" className="text-phosphor hover:underline">
               Jetzt einloggen
             </Link>
           </p>
@@ -57,8 +57,8 @@ export default function VerifyEmail() {
               <p>{message}</p>
             </div>
           </div>
-          <p className="text-gray-500 font-mono text-sm mt-6 text-center">
-            <Link to="/register" className="text-green-400 hover:underline">
+          <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>
+            <Link to="/register" className="text-phosphor hover:underline">
               Erneut registrieren
             </Link>
           </p>
