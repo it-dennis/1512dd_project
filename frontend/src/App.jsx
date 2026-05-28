@@ -33,7 +33,7 @@ export default function App() {
             />
           </Routes>
         </main>
-        <footer className="border-t border-gray-800 py-6 text-center text-gray-600 font-mono text-xs">
+        <footer className="border-t border-phosphor-muted/20 py-6 text-center font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>
           Schneider/Amstrad PC1512-DD Emulator Plattform · Weiterbildungsprojekt von Dennis Rapp · 2026
         </footer>
       </div>

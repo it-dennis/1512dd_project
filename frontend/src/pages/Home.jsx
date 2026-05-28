@@ -28,25 +28,35 @@ const FEATURES = [
 export default function Home() {
   return (
     <div>
+      {/* Site Banner */}
+      <div className="w-full overflow-hidden border-b border-phosphor-muted/20">
+        <img
+          src="/logo/banner.png"
+          alt="1512dd Emulator"
+          className="w-full object-cover"
+          style={{ maxHeight: '320px', objectPosition: '40% center' }}
+        />
+      </div>
+
       {/* Hero */}
-      <section className="relative border-b border-gray-800 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-950/20 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-4 py-24 relative">
-          <p className="font-mono text-green-400 text-sm tracking-widest mb-4 uppercase">
+      <section className="relative border-b border-phosphor-muted/20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-crt-dark/60 to-transparent pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-4 py-20 relative">
+          <p className="font-mono text-phosphor-muted text-sm tracking-widest mb-4 uppercase">
             Schneider Amstrad PC1512-DD // Emulation · Infothek · Liebe
           </p>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Der PC
             <br />
-            <span className="text-green-400">der alles veränderte.</span>
+            <span className="text-phosphor">der alles veränderte.</span>
           </h1>
-          <p className="text-gray-400 text-xl max-w-2xl mb-10 leading-relaxed">
+          <p className="text-xl max-w-2xl mb-10 leading-relaxed" style={{ color: 'rgba(170,255,204,0.70)' }}>
             Die "Alles-aus-einer-Hand"-Strategie machte einen PC plötzlich bezahlbar für fast jeden.
             Der PC1512 war nicht nur ein Verkaufsschlager, sondern auch der Beginn einer neuen Ära in der Computerwelt. Erlebe die Faszination dieses Kultgeräts hautnah – direkt in deinem Browser.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link to="/register" className="btn-primary text-base px-6 py-3">
-              Konto erstellen & starten
+              Konto erstellen &amp; starten
             </Link>
             <Link to="/articles" className="btn-secondary text-base px-6 py-3">
               Infothek lesen
@@ -56,19 +66,19 @@ export default function Home() {
       </section>
 
       {/* Specs */}
-      <section className="border-b border-gray-800">
+      <section className="border-b border-phosphor-muted/20">
         <div className="max-w-6xl mx-auto px-4 py-16">
           <h2 className="text-2xl font-bold text-white mb-10 font-mono">
-            <span className="text-green-400">//</span> Technische Daten
+            <span className="text-phosphor">//</span> Technische Daten
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {SPECS.map(spec => (
               <div key={spec.label} className="card">
-                <div className="text-green-400 font-mono text-xs uppercase tracking-wider mb-2">
+                <div className="text-phosphor font-mono text-xs uppercase tracking-wider mb-2">
                   {spec.label}
                 </div>
                 <div className="text-white text-2xl font-bold">{spec.value}</div>
-                <div className="text-gray-500 text-sm mt-1">{spec.sub}</div>
+                <div className="text-phosphor-muted text-sm mt-1">{spec.sub}</div>
               </div>
             ))}
           </div>
@@ -78,14 +88,14 @@ export default function Home() {
       {/* Features */}
       <section className="max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-2xl font-bold text-white mb-10 font-mono">
-          <span className="text-green-400">//</span> Was dich erwartet
+          <span className="text-phosphor">//</span> Was dich erwartet
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {FEATURES.map(f => (
             <div key={f.title} className="card">
               <div className="text-4xl mb-4">{f.icon}</div>
               <h3 className="text-white font-bold text-lg mb-2">{f.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(170,255,204,0.70)' }}>{f.desc}</p>
             </div>
           ))}
         </div>
