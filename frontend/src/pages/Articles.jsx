@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { articlesApi } from '../api/client';
 
@@ -27,9 +28,22 @@ export default function Articles() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <h1 className="text-3xl font-bold text-white mb-2">Infothek</h1>
-      <p className="mb-8 font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
+      <p className="mb-6 font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
         Alles über den Amstrad PC1512-DD
       </p>
+
+      <div className="mb-8 card flex flex-wrap items-center justify-between gap-4" style={{ borderColor: 'rgba(57,255,122,0.2)' }}>
+        <div>
+          <span className="text-phosphor font-mono text-xs uppercase tracking-wider">Hardware</span>
+          <p className="text-white font-bold mt-0.5">Technische Daten des PC1512-DD</p>
+          <p className="text-sm mt-1" style={{ color: 'rgba(170,255,204,0.50)' }}>
+            Prozessor, RAM, Grafik und Laufwerke im Detail erklärt.
+          </p>
+        </div>
+        <Link to="/technik" className="btn-secondary text-sm px-5 py-2 flex-shrink-0">
+          Technische Daten →
+        </Link>
+      </div>
 
       {loading && (
         <div className="font-mono text-phosphor animate-pulse">Lade Artikel...</div>

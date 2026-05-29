@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Articles from './pages/Articles';
+import TechnischeDaten from './pages/TechnischeDaten';
 import ArticleDetail from './pages/ArticleDetail';
 import Emulator from './pages/Emulator';
 import Login from './pages/Login';
@@ -19,6 +20,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/articles" element={<Articles />} />
+            <Route path="/technik" element={<TechnischeDaten />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

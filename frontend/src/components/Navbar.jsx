@@ -26,6 +26,13 @@ export default function Navbar() {
             Infothek
           </Link>
 
+          <Link
+            to="/technik"
+            className="text-phosphor-soft/70 hover:text-phosphor transition-colors font-mono text-sm"
+          >
+            Technik
+          </Link>
+
           {user ? (
             <>
               <Link

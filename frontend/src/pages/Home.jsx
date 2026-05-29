@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom';
 
-const SPECS = [
-  { label: 'Prozessor', value: 'Intel 8086', sub: '8 MHz Turbo' },
-  { label: 'RAM', value: '512 KB', sub: 'erweiterbar auf 640 KB' },
-  { label: 'Grafik', value: 'CGA', sub: '320×200 · 4 Farben' },
-  { label: 'Laufwerke', value: '2× 5,25"', sub: '360 KB je Diskette' },
-];
-
 const FEATURES = [
   {
     icon: '⌨',
@@ -61,26 +54,6 @@ export default function Home() {
             <Link to="/articles" className="btn-secondary text-base px-6 py-3">
               Infothek lesen
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Specs */}
-      <section className="border-b border-phosphor-muted/20">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <h2 className="text-2xl font-bold text-white mb-10 font-mono">
-            <span className="text-phosphor">//</span> Technische Daten
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SPECS.map(spec => (
-              <div key={spec.label} className="card">
-                <div className="text-phosphor font-mono text-xs uppercase tracking-wider mb-2">
-                  {spec.label}
-                </div>
-                <div className="text-white text-2xl font-bold">{spec.value}</div>
-                <div className="text-phosphor-muted text-sm mt-1">{spec.sub}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
