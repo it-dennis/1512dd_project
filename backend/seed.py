@@ -267,10 +267,10 @@ def run_seed():
     db = SessionLocal()
     try:
         # Admin-User anlegen falls nicht vorhanden
-        admin = db.query(models.User).filter(models.User.email == "admin@pc1512.local").first()
+        admin = db.query(models.User).filter(models.User.email == "admin@retrokauz.de").first()
         if not admin:
             admin = models.User(
-                email="admin@pc1512.local",
+                email="admin@retrokauz.de",
                 username="admin",
                 password_hash=hash_password("admin1512"),
                 is_admin=True,
