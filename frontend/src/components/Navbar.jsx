@@ -41,6 +41,14 @@ export default function Navbar() {
               >
                 Emulator
               </Link>
+              {user.is_admin && (
+                <Link
+                  to="/admin"
+                  className="text-phosphor/50 hover:text-phosphor transition-colors font-mono text-xs border border-phosphor/20 px-2 py-1"
+                >
+                  Admin
+                </Link>
+              )}
               <span className="text-phosphor-muted/60 font-mono text-xs hidden sm:inline">
                 [{user.username}]
               </span>

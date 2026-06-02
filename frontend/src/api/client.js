@@ -28,3 +28,7 @@ export const articlesApi = {
   update: (id, data) => api.put(`/api/articles/${id}`, data),
   remove: (id) => api.delete(`/api/articles/${id}`),
 };
+
+export const categoriesApi = {
+  list: () => api.get('/api/categories/'),
+};

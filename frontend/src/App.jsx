@@ -1,7 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Home from './pages/Home';
 import Articles from './pages/Articles';
 import TechnischeDaten from './pages/TechnischeDaten';
@@ -10,6 +11,7 @@ import Emulator from './pages/Emulator';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
+import Admin from './pages/Admin';
 
 export default function App() {
   return (
@@ -33,10 +35,20 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              }
+            />
           </Routes>
         </main>
         <footer className="border-t border-phosphor-muted/20 py-6 text-center font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>
           Schneider/Amstrad PC1512-DD Emulator Plattform · Weiterbildungsprojekt von Dennis Rapp · 2026
+          {' '}
+          <Link to="/admin" style={{ color: 'rgba(30,167,88,0.08)' }} className="hover:opacity-30 transition-opacity">·</Link>
         </footer>
       </div>
     </AuthProvider>

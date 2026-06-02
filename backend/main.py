@@ -1,9 +1,12 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from typing import List
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
-from database import engine, Base
+from database import engine, Base, get_db
 import models
+import schemas
 from routers import auth as auth_router
 from routers import articles as articles_router
 from routers import users as users_router
@@ -48,3 +51,8 @@ app.include_router(users_router.router)
 @app.get("/api/health")
 def health():
     return {"status": "ok", "service": "PC1512 Backend"}
+
+
+@app.get("/api/categories/", response_model=List[schemas.CategoryOut])
+def list_categories(db: Session = Depends(get_db)):
+    return db.query(models.Category).order_by(models.Category.name).all()
