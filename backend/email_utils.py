@@ -1,27 +1,18 @@
-import smtplib
 import os
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import requests
 
 
 def send_verification_email(to_email: str, username: str, token: str):
-    smtp_host = os.getenv("SMTP_HOST", "")
     base_url = os.getenv("APP_BASE_URL", "http://localhost:5173")
     verify_url = f"{base_url}/verify-email?token={token}"
 
-    if not smtp_host:
+    brevo_api_key = os.getenv("BREVO_API_KEY", "")
+
+    if not brevo_api_key:
         print(f"\n[DEV EMAIL] Bestätigungslink für {to_email}:\n{verify_url}\n")
         return
 
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_password = os.getenv("SMTP_PASSWORD", "")
-    smtp_from = os.getenv("SMTP_FROM", smtp_user)
-
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Bitte bestätige deine E-Mail-Adresse – PC1512 Emulator"
-    msg["From"] = smtp_from
-    msg["To"] = to_email
+    smtp_from = os.getenv("SMTP_FROM", "noreply@retrokauz.de")
 
     html = f"""<!DOCTYPE html>
 <html>
@@ -44,13 +35,21 @@ def send_verification_email(to_email: str, username: str, token: str):
 </body>
 </html>"""
 
-    msg.attach(MIMEText(html, "html"))
+    payload = {
+        "sender": {"name": "PC1512 Emulator", "email": smtp_from},
+        "to": [{"email": to_email, "name": username}],
+        "subject": "Bitte bestätige deine E-Mail-Adresse – PC1512 Emulator",
+        "htmlContent": html,
+    }
 
     try:
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
-            server.starttls()
-            server.login(smtp_user, smtp_password)
-            server.sendmail(smtp_from, to_email, msg.as_string())
-        print(f"[EMAIL OK] Bestätigungsmail erfolgreich gesendet an {to_email} via {smtp_host}")
+        response = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            json=payload,
+            headers={"api-key": brevo_api_key},
+            timeout=30,
+        )
+        response.raise_for_status()
+        print(f"[EMAIL OK] Bestätigungsmail erfolgreich gesendet an {to_email}")
     except Exception as e:
         print(f"[EMAIL ERROR] Fehler beim Senden der Bestätigungsmail an {to_email}: {e}")
