@@ -51,5 +51,6 @@ def send_verification_email(to_email: str, username: str, token: str):
             server.starttls()
             server.login(smtp_user, smtp_password)
             server.sendmail(smtp_from, to_email, msg.as_string())
+        print(f"[EMAIL OK] Bestätigungsmail erfolgreich gesendet an {to_email} via {smtp_host}")
     except Exception as e:
         print(f"[EMAIL ERROR] Fehler beim Senden der Bestätigungsmail an {to_email}: {e}")
