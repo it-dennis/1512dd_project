@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import Admin from './pages/Admin';
+import Praesentation from './pages/Praesentation';
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
                 </AdminRoute>
               }
             />
+            <Route path="/praesentation" element={<Praesentation />} />
           </Routes>
         </main>
         <footer className="border-t border-phosphor-muted/20 py-6 text-center font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>

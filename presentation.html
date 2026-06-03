@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC1512-DD Emulator Platform — Präsentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    --phosphor: #00FF41;
+    --phosphor-dim: rgba(0,255,65,0.6);
+    --phosphor-muted: rgba(0,255,65,0.35);
+    --bg: #050a05;
+    --card-bg: #0a120a;
+    --border: rgba(0,255,65,0.18);
+    --text: rgba(170,255,204,0.85);
+    --text-dim: rgba(170,255,204,0.55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: none;
+  }
+
+  /* CRT scanlines */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.07) 2px,
+      rgba(0,0,0,0.07) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* CRT vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  .slides-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .slide.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    font-size: 12px;
+    color: var(--phosphor-muted);
+  }
+
+  .nav button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--phosphor-dim);
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+
+  .nav button:hover {
+    background: rgba(0,255,65,0.07);
+    border-color: var(--phosphor-dim);
+    color: var(--phosphor);
+  }
+
+  .slide-counter {
+    min-width: 60px;
+    text-align: center;
+    color: var(--phosphor-muted);
+  }
+
+  /* Progress bar */
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--phosphor);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px var(--phosphor);
+    z-index: 1000;
+  }
+
+  /* Slide type: title */
+  .slide-title {
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(0,255,65,0.04) 0%, transparent 70%);
+  }
+
+  .label-top {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--phosphor-muted);
+    margin-bottom: 24px;
+  }
+
+  h1.main-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(36px, 5vw, 68px);
+    font-weight: 900;
+    color: var(--phosphor);
+    text-shadow: 0 0 30px rgba(0,255,65,0.5), 0 0 60px rgba(0,255,65,0.2);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+  }
+
+  .author-block {
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .author-block .name {
+    color: var(--phosphor-dim);
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+  .author-block .context {
+    font-size: 11px;
+    color: var(--phosphor-muted);
+    letter-spacing: 1px;
+  }
+
+  /* Slide type: content */
+  .slide-content {
+    align-items: flex-start;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .slide-heading {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(22px, 2.8vw, 38px);
+    font-weight: 700;
+    color: var(--phosphor);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-shadow: 0 0 20px rgba(0,255,65,0.3);
+  }
+
+  .slide-heading .num {
+    font-size: 13px;
+    color: var(--phosphor-muted);
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+  }
+
+  .cards.col2 { grid-template-columns: 1fr 1fr; }
+  .cards.col3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 22px 26px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--phosphor-dim); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--phosphor);
+    opacity: 0.5;
+  }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--phosphor-muted);
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .card-body {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  /* Tech badge */
+  .badge {
+    display: inline-block;
+    border: 1px solid var(--phosphor-dim);
+    color: var(--phosphor);
+    font-size: 11px;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+    margin: 4px 3px;
+  }
+
+  /* Arch diagram */
+  .arch {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--text);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 28px 36px;
+    width: 100%;
+  }
+
+  .arch .green { color: var(--phosphor); }
+  .arch .dim { color: var(--text-dim); }
+  .arch .arrow { color: var(--phosphor-muted); }
+
+  /* Full-width big stat */
+  .big-stats {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .stat-box {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 28px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 38px;
+    color: var(--phosphor);
+    text-shadow: 0 0 20px rgba(0,255,65,0.4);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* Feature list */
+  .feat-list {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .feat-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .feat-list li .tick {
+    color: var(--phosphor);
+    font-size: 14px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .feat-list li .feat-title {
+    color: #fff;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+
+  .feat-list li .feat-desc {
+    color: var(--text-dim);
+  }
+
+  /* Step list */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    color: var(--phosphor);
+    min-width: 36px;
+    text-shadow: 0 0 10px rgba(0,255,65,0.3);
+    flex-shrink: 0;
+  }
+
+  .step-body .step-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .step-body .step-desc {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* URL display */
+  .url-display {
+    background: rgba(0,255,65,0.06);
+    border: 1px solid var(--phosphor-dim);
+    padding: 16px 28px;
+    text-align: center;
+    font-size: 20px;
+    color: var(--phosphor);
+    letter-spacing: 2px;
+    margin-top: 8px;
+    box-shadow: 0 0 30px rgba(0,255,65,0.1);
+  }
+
+  /* Columns layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+  }
+
+  /* Blinking cursor */
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 18px;
+    background: var(--phosphor);
+    animation: blink 1s step-end infinite;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Highlight text */
+  .hl { color: var(--phosphor); }
+
+  /* Code block */
+  .code-block {
+    background: #000;
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    font-size: 12px;
+    color: var(--phosphor-dim);
+    line-height: 1.8;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .code-block .prompt { color: var(--phosphor); }
+  .code-block .comment { color: rgba(0,255,65,0.3); }
+
+  /* Thank you slide */
+  .slide-thanks {
+    text-align: center;
+  }
+
+  .glitch {
+    position: relative;
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(40px, 6vw, 80px);
+    color: var(--phosphor);
+    text-shadow: 0 0 40px rgba(0,255,65,0.6);
+    font-weight: 900;
+  }
+
+  /* Scrollbar for content that might overflow */
+  .scroll-content {
+    overflow-y: auto;
+    max-height: 65vh;
+    padding-right: 8px;
+  }
+
+  .scroll-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .scroll-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroll-content::-webkit-scrollbar-thumb {
+    background: var(--phosphor-muted);
+  }
+
+  /* Keyboard hint */
+  .kb-hint {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    font-size: 10px;
+    color: var(--phosphor-muted);
+    letter-spacing: 1px;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<div class="kb-hint">← → PFEILTASTEN · LEERTASTE</div>
+
+<div class="slides-container" id="slides">
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 1 — TITEL
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-title active" data-index="0">
+    <div class="label-top">Weiterbildungsprojekt · Abschlusspräsentation · 2026</div>
+    <h1 class="main-title">PC1512-DD<br>Emulator<br>Platform</h1>
+    <p class="subtitle">Schneider Amstrad PC1512-DD im Browser — von A bis Z selbst aufgebaut</p>
+    <div class="author-block">
+      <span class="name">Dennis Rapp</span>
+      <span class="context">1512.retrokauz.de &nbsp;·&nbsp; Weiterbildungsprojekt</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 2 — PROJEKTÜBERSICHT
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="1">
+    <h2 class="slide-heading"><span class="num">01</span> Was ist das Projekt?</h2>
+    <div class="cards col3">
+      <div class="card">
+        <span class="card-icon">⌨</span>
+        <div class="card-label">Kern-Feature</div>
+        <div class="card-title">Browser-Emulator</div>
+        <div class="card-body">Der Amstrad PC1512-DD läuft direkt im Browser — kein Download, kein Plugin. Angetrieben von v86 (WebAssembly). Nur einloggen und starten.</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">📚</span>
+        <div class="card-label">Wissens-Plattform</div>
+        <div class="card-title">Infothek &amp; Artikel</div>
+        <div class="card-body">Kuratierte Artikel rund um Geschichte, Technik und Hintergrundwissen zum PC1512. Kategorisiert, mit Markdown-Unterstützung.</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔐</span>
+        <div class="card-label">Nutzerverwaltung</div>
+        <div class="card-title">Registrierung &amp; Login</div>
+        <div class="card-body">Vollständige Auth-Strecke: Registrierung, E-Mail-Bestätigung, JWT-Login, Admin-Rollen, geschützte Routen.</div>
+      </div>
+    </div>
+    <div class="url-display" style="margin-top:28px; font-size: 16px;">
+      https://1512.retrokauz.de
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 3 — MOTIVATION
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="2">
+    <h2 class="slide-heading"><span class="num">02</span> Die Idee</h2>
+    <div class="two-col">
+      <div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">→</div>
+            <div class="step-body">
+              <div class="step-title">Persönlicher Anlass</div>
+              <div class="step-desc">Der Schneider/Amstrad PC1512-DD war der erste eigene Computer. Das Projekt ist ein Stück digitale Nostalgie — und ein komplettes Full-Stack-Weiterbildungsprojekt.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">→</div>
+            <div class="step-body">
+              <div class="step-title">Technische Ambition</div>
+              <div class="step-desc">Ziel war kein CRUD-Tutorial, sondern ein vollständiger, produktionsfähiger Stack: eigene Domain, VPS, SSL, Docker, echte Auth mit E-Mail-Versand, und ein WebAssembly-Emulator.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">→</div>
+            <div class="step-body">
+              <div class="step-title">Ergebnis</div>
+              <div class="step-desc">Eine öffentlich erreichbare Web-Plattform unter eigener Domain — entwickelt, deployt und betrieben von einer Person.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="display:flex; flex-direction:column; justify-content:center;">
+        <div class="card-label">Der Computer</div>
+        <div class="card-title" style="font-size:17px; margin-bottom:14px;">Schneider Amstrad PC1512-DD</div>
+        <div class="card-body">
+          <span class="hl">Intel 8086</span> @ 8 MHz<br>
+          <span class="hl">512 KB RAM</span> (erweiterbar auf 640 KB)<br>
+          <span class="hl">CGA-Grafik</span> — 320×200, 4 Farben<br>
+          <span class="hl">2× 5,25″ Diskette</span> — je 360 KB<br>
+          <span class="hl">MS-DOS 3.3</span> + GEM Desktop<br>
+          <span class="hl">Erscheinungsjahr:</span> 1986
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 4 — TECH STACK
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="3">
+    <h2 class="slide-heading"><span class="num">03</span> Technologie-Stack</h2>
+    <div class="cards col2">
+      <div class="card">
+        <div class="card-label">Frontend</div>
+        <div class="card-title">React + Vite + Tailwind CSS</div>
+        <div class="card-body" style="margin-top:10px;">
+          <span class="badge">React 18</span>
+          <span class="badge">Vite</span>
+          <span class="badge">Tailwind CSS</span>
+          <span class="badge">React Router</span>
+          <span class="badge">Axios</span>
+          <span class="badge">react-markdown</span>
+        </div>
+        <div class="card-body" style="margin-top:12px;">CRT/Phosphor-Design — Retroästhetik bewusst eingebaut. Eigene Tailwind-Farben, Scanlines per CSS.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Backend</div>
+        <div class="card-title">FastAPI + SQLAlchemy + MySQL</div>
+        <div class="card-body" style="margin-top:10px;">
+          <span class="badge">FastAPI</span>
+          <span class="badge">Python 3.12</span>
+          <span class="badge">SQLAlchemy</span>
+          <span class="badge">MySQL 8</span>
+          <span class="badge">JWT / bcrypt</span>
+          <span class="badge">Pydantic</span>
+        </div>
+        <div class="card-body" style="margin-top:12px;">REST-API mit Auto-Dokumentation (OpenAPI), Passwort-Hashing (bcrypt), JWT-Tokens.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Emulator</div>
+        <div class="card-title">v86 — x86 in WebAssembly</div>
+        <div class="card-body" style="margin-top:10px;">
+          <span class="badge">v86 0.5.357</span>
+          <span class="badge">WebAssembly</span>
+          <span class="badge">FreeDOS</span>
+        </div>
+        <div class="card-body" style="margin-top:12px;">Vollständige x86-Emulation im Browser. BIOS, VGA, Disketten-Images — alles läuft im WASM-Kontext.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Infrastruktur</div>
+        <div class="card-title">Docker + nginx + VPS</div>
+        <div class="card-body" style="margin-top:10px;">
+          <span class="badge">Docker Compose</span>
+          <span class="badge">nginx</span>
+          <span class="badge">Let's Encrypt</span>
+          <span class="badge">Ubuntu 24.04</span>
+        </div>
+        <div class="card-body" style="margin-top:12px;">Produktions-Deployment via Docker Compose. SSL-Zertifikat automatisch über Certbot.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 5 — ARCHITEKTUR
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="4">
+    <h2 class="slide-heading"><span class="num">04</span> System-Architektur</h2>
+    <div class="arch">
+      <span class="green">Browser</span> <span class="arrow">──── HTTPS :443 ────►</span> <span class="green">nginx</span> <span class="dim">(frontend-Container)</span>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">│</span>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">├── /</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> <span class="green">React App</span> <span class="dim">(statisch)</span>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">├── /v86/</span>&nbsp;<span class="arrow">──►</span> <span class="green">v86 WASM + Disk-Images</span>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">└── /api/</span>&nbsp;<span class="arrow">──►</span> <span class="green">FastAPI</span> <span class="dim">(backend-Container :8000)</span>
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">└──►</span> <span class="green">MySQL 8</span> <span class="dim">(db-Container :3306)</span>
+    </div>
+    <div class="cards col3" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-label">VPS</div>
+        <div class="card-title">Ubuntu 24.04 LTS</div>
+        <div class="card-body">Contabo VPS · IP 37.120.177.224 · /opt/1512dd</div>
+      </div>
+      <div class="card">
+        <div class="card-label">SSL</div>
+        <div class="card-title">Let's Encrypt</div>
+        <div class="card-body">Certbot · Auto-Renewal · gültig bis Aug 2026</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Datenbank</div>
+        <div class="card-title">MySQL 8.0</div>
+        <div class="card-body">Persistentes Docker-Volume · Schema: Users, Articles, Categories</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 6 — REGISTRIERUNG & E-MAIL
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="5">
+    <h2 class="slide-heading"><span class="num">05</span> Registrierung &amp; E-Mail-Bestätigung</h2>
+    <div class="two-col">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Formular ausfüllen</div>
+            <div class="step-desc">Benutzername, E-Mail, Passwort. Passwort wird serverseitig mit <span class="hl">bcrypt</span> gehasht — niemals im Klartext gespeichert.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Verification Token</div>
+            <div class="step-desc">Backend generiert ein einzigartiges Token, speichert es in der DB mit <span class="hl">72h Ablaufzeit</span>. Account ist zunächst unverified.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Bestätigungs-E-Mail</div>
+            <div class="step-desc">Mail wird über <span class="hl">Brevo API</span> versendet. Absender: <span class="hl">noreply@retrokauz.de</span> — eigene Domain, eigenes Hosting.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Klick &amp; Freischaltung</div>
+            <div class="step-desc">Link aus der Mail → Backend setzt <span class="hl">is_verified = true</span> → Emulator-Zugriff freigeschaltet.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-label">E-Mail-Dienst</div>
+          <div class="card-title">Brevo (ehemals Sendinblue)</div>
+          <div class="card-body" style="margin-top:10px;">
+            Transaktions-E-Mails via <span class="hl">Brevo REST API</span>. Kein SMTP auf Port 587 (war geblockt) — API-Aufruf direkt aus dem Backend.
+            <br><br>
+            Absender-Domain: <span class="hl">retrokauz.de</span><br>
+            SPF &amp; DKIM: konfiguriert beim Hoster<br>
+            E-Mail-Template: HTML im Retro-Design
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="card-label">Sicherheit</div>
+          <div class="card-title">JWT-Authentifizierung</div>
+          <div class="card-body" style="margin-top:8px;">
+            Nach Login: <span class="hl">JWT-Token (HS256)</span> im localStorage. Gültig 24h. Jede API-Anfrage schickt den Token im Authorization-Header.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 7 — EMULATOR
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="6">
+    <h2 class="slide-heading"><span class="num">06</span> Der Browser-Emulator</h2>
+    <div class="two-col">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-body">
+            <div class="step-title">v86 — WebAssembly x86-Emulation</div>
+            <div class="step-desc">Open-Source-Projekt: vollständiger Intel x86-Prozessor in WebAssembly. Emuliert CPU, RAM, VGA, BIOS, Diskettenlaufwerke — direkt im Browser-Tab.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-body">
+            <div class="step-title">Nur für eingeloggte Nutzer</div>
+            <div class="step-desc">Der Emulator steckt hinter einer <span class="hl">Protected Route</span>. Wer nicht eingeloggt ist, wird zum Login weitergeleitet.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-body">
+            <div class="step-title">Komponenten im Frontend</div>
+            <div class="step-desc"><span class="hl">EmulatorScreen.jsx</span>: Screen-Container (div + canvas für CGA/VGA), Start-Button, Status-Anzeige, F11 = Vollbild.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">→</div>
+          <div class="step-body">
+            <div class="step-title">Aktuelle Konfiguration</div>
+            <div class="step-desc">Startet <span class="hl">FreeDOS</span>. Disk-Images werden über nginx als statische Dateien ausgeliefert (<span class="hl">/v86/</span>). WASM-Datei: ~2 MB.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="display:flex; flex-direction:column; gap:14px;">
+        <div class="card-label">Technische Details v86</div>
+        <div class="card-body">
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div><span class="hl">v86.wasm</span> — Kern der Emulation (~2 MB)</div>
+            <div><span class="hl">seabios.bin</span> — PC-BIOS (SeaBIOS)</div>
+            <div><span class="hl">vgabios.bin</span> — VGA-BIOS</div>
+            <div><span class="hl">freedos722.img</span> — Boot-Image (720 KB Diskette)</div>
+            <div><span class="hl">32 MB RAM</span> emuliert, 2 MB VGA-Speicher</div>
+            <div><span class="hl">CGA-Modus</span> — 320×200, 4 Farben</div>
+          </div>
+        </div>
+        <div style="border-top: 1px solid var(--border); padding-top:14px; font-size:12px; color:var(--text-dim);">
+          Das Emulatorfenster ist live erreichbar unter<br>
+          <span class="hl">1512.retrokauz.de/emulator</span> — nach Login.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 8 — INFOTHEK & ADMIN
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="7">
+    <h2 class="slide-heading"><span class="num">07</span> Infothek &amp; Admin-Panel</h2>
+    <div class="cards col2">
+      <div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="card-label">Infothek</div>
+          <div class="card-title">Artikel-System mit Markdown</div>
+          <div class="card-body" style="margin-top:10px;">
+            Artikel werden im Admin-Bereich erstellt und mit <span class="hl">Markdown</span> verfasst. Das Frontend rendert sie mit <span class="hl">react-markdown</span>. Kategorisierung möglich (z. B. Geschichte, Technik, Software).
+            <br><br>
+            Öffentlich lesbar — kein Login erforderlich.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Technische Daten</div>
+          <div class="card-title">Eigene Specs-Seite</div>
+          <div class="card-body" style="margin-top:10px;">
+            Separate Seite mit Hardware-Spezifikationen: Prozessor, RAM, CGA-Grafik, Diskettenlaufwerke — mit historischen Erklärungen für Nicht-Techniker.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Admin-Panel</div>
+        <div class="card-title">[ ADMIN PANEL ]</div>
+        <div class="card-body" style="margin-top:14px; display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <span class="hl">Zugang:</span> Nur für Nutzer mit <span class="hl">is_admin = true</span>. Versteckter Link im Footer. Falsche Rolle → 403.
+          </div>
+          <div>
+            <span class="hl">Artikel-Verwaltung:</span>
+            <ul style="margin-top:6px; padding-left:16px; color:var(--text-dim); line-height:1.9;">
+              <li>Artikel erstellen mit Titel, Slug, Kategorie, Excerpt, Markdown-Body</li>
+              <li>Artikel bearbeiten (Slug bleibt unveränderlich)</li>
+              <li>Artikel löschen (mit Bestätigungs-Dialog)</li>
+            </ul>
+          </div>
+          <div>
+            <span class="hl">Slug-Generierung:</span> Automatisch aus Titel (Umlaute korrekt ersetzt: ä→ae etc.)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 9 — DEPLOYMENT
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="8">
+    <h2 class="slide-heading"><span class="num">08</span> Deployment auf dem VPS</h2>
+    <div class="two-col">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">VPS eingerichtet</div>
+            <div class="step-desc">Ubuntu 24.04 LTS auf Contabo VPS. Docker + Docker Compose installiert. Firewall konfiguriert (Ports 80, 443 offen).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Domain &amp; DNS</div>
+            <div class="step-desc">Domain <span class="hl">retrokauz.de</span> + Subdomain <span class="hl">1512.retrokauz.de</span> → A-Record auf VPS-IP. DNS-Propagation abgewartet.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">SSL mit Let's Encrypt</div>
+            <div class="step-desc">Certbot im Frontend-Container. Zertifikat automatisch ausgestellt und eingebunden. <span class="hl">Auto-Renewal</span> aktiv. Gültig bis Aug 2026.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Docker Compose Prod</div>
+            <div class="step-desc">3 Services: <span class="hl">db</span> (MySQL), <span class="hl">backend</span> (FastAPI), <span class="hl">frontend</span> (nginx + React + v86). Persistentes Volume für Datenbank.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Umgebungsvariablen</div>
+            <div class="step-desc"><span class="hl">.env</span>-Datei: DB-Passwort, JWT-Secret, Brevo-API-Key, E-Mail-Absender, App-URL. Nie im Git-Repo.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="code-block">
+<span class="comment"># Deployment-Befehl auf dem VPS</span>
+<span class="prompt">$</span> cd /opt/1512dd
+<span class="prompt">$</span> git pull origin main
+<span class="prompt">$</span> docker compose \
+    -f docker-compose.prod.yml \
+    up -d --build
+
+<span class="comment"># Drei Container starten:</span>
+<span class="green">✓</span> db        (MySQL 8.0)
+<span class="green">✓</span> backend   (FastAPI :8000)
+<span class="green">✓</span> frontend  (nginx :80/:443)
+
+<span class="comment"># nginx leitet weiter:</span>
+/      → React App (statisch)
+/api/  → FastAPI Backend
+/v86/  → WASM + Disk-Images
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="card-label">Git-Repository</div>
+          <div class="card-body" style="font-size:12px;">github.com/it-dennis/1512dd_project</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 10 — FEATURES ZUSAMMENFASSUNG
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="9">
+    <h2 class="slide-heading"><span class="num">09</span> Was die Plattform bietet</h2>
+    <ul class="feat-list">
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">Browser-Emulator (v86):</span><span class="feat-desc">Amstrad PC1512-DD läuft direkt im Browser. FreeDOS startet ohne Plugin oder Download. Vollbildmodus via F11.</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">Registrierung mit E-Mail-Bestätigung:</span><span class="feat-desc">Vollständige Auth-Strecke. Bestätigungsmail über Brevo API, Absender noreply@retrokauz.de (eigene Domain).</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">JWT-Login &amp; geschützte Routen:</span><span class="feat-desc">Emulator nur für verifizierte Nutzer. Admin-Panel nur für Admins. Tokens sind 24h gültig.</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">Infothek mit Markdown-Artikeln:</span><span class="feat-desc">Kategorisierte Artikel, public zugänglich. Volltexte in Markdown, gerendert mit react-markdown.</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">Technische Daten-Seite:</span><span class="feat-desc">Hardware-Specs des PC1512 mit historischen Erläuterungen — Intel 8086, CGA, Diskettenlaufwerke.</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">Admin-Panel:</span><span class="feat-desc">Artikel erstellen, bearbeiten, löschen. Kategorie-Zuweisung, automatische Slug-Generierung.</span></span>
+      </li>
+      <li>
+        <span class="tick">▶</span>
+        <span><span class="feat-title">HTTPS + eigene Domain:</span><span class="feat-desc">Let's Encrypt SSL, Auto-Renewal. 1512.retrokauz.de ist öffentlich erreichbar.</span></span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 11 — ZAHLEN
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-content" data-index="10">
+    <h2 class="slide-heading"><span class="num">10</span> Das Projekt in Zahlen</h2>
+    <div class="big-stats">
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Docker-Container<br>(db · backend · frontend)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">9</div>
+        <div class="stat-label">API-Endpoints<br>(Auth · Artikel · Nutzer)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Frontend-Seiten<br>(Routen + geschützte Bereiche)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1</div>
+        <div class="stat-label">VPS · Domain · SSL<br>alles selbst eingerichtet</div>
+      </div>
+    </div>
+    <div class="cards col3" style="margin-top:24px;">
+      <div class="card">
+        <div class="card-label">Frontend-Technologien</div>
+        <div class="card-body">React, Vite, Tailwind CSS, React Router, Axios, react-markdown</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Backend-Technologien</div>
+        <div class="card-body">FastAPI, SQLAlchemy, MySQL 8, bcrypt, JWT (jose), Pydantic, Brevo API</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Infrastruktur</div>
+        <div class="card-body">Docker Compose, nginx, Let's Encrypt, Ubuntu 24.04 LTS, GitHub</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SLIDE 12 — DANKE / LIVE DEMO
+  ══════════════════════════════════════════════════ -->
+  <div class="slide slide-title slide-thanks" data-index="11">
+    <div class="label-top">Abschlusspräsentation · Weiterbildungsprojekt · 2026</div>
+    <div class="glitch">Danke.</div>
+    <p class="subtitle" style="margin-top:24px; font-size:15px;">Das Projekt ist live — jetzt Demo!</p>
+    <div class="url-display" style="margin-top:24px;">
+      https://1512.retrokauz.de
+    </div>
+    <div class="cards col3" style="margin-top:36px; max-width:860px; width:100%;">
+      <div class="card" style="text-align:center;">
+        <div class="card-label">Registrierung</div>
+        <div class="card-body">Formular · Brevo-Mail · Bestätigung</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-label">Emulator</div>
+        <div class="card-body">Login → /emulator → FreeDOS startet</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-label">Admin-Panel</div>
+        <div class="card-body">Versteckter Link im Footer · Artikel anlegen</div>
+      </div>
+    </div>
+    <div class="author-block" style="margin-top:36px;">
+      <span class="name">Dennis Rapp</span>
+      <span class="context">info@dennisrapp.com &nbsp;·&nbsp; github.com/it-dennis</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">◀ ZURÜCK</button>
+  <span class="slide-counter" id="counter">1 / 12</span>
+  <button onclick="nextSlide()">WEITER ▶</button>
+</div>
+
+<div class="progress" id="progress"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  const total = slides.length;
+
+  function show(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    const el = slides[current];
+    el.classList.add('active');
+    el.classList.remove('fade-in');
+    void el.offsetWidth; // reflow
+    el.classList.add('fade-in');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    const pct = ((current) / (total - 1)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  }
+
+  function nextSlide() { show(current + 1); }
+  function prevSlide() { show(current - 1); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault(); nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); prevSlide();
+    } else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(total - 1); }
+  });
+
+  // Touch/swipe
+  let touchX = 0;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  // Init
+  show(0);
+</script>
+</body>
+</html>

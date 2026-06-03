@@ -33,6 +33,13 @@ export default function Navbar() {
             Technik
           </Link>
 
+          <Link
+            to="/praesentation"
+            className="text-phosphor-soft/70 hover:text-phosphor transition-colors font-mono text-sm"
+          >
+            Präsentation
+          </Link>
+
           {user ? (
             <>
               <Link
