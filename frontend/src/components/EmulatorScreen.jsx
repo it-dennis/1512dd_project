@@ -12,6 +12,7 @@ const EMULATOR_CONFIG = {
 
 export default function EmulatorScreen() {
   const screenRef = useRef(null);
+  const containerRef = useRef(null);
   const emulatorRef = useRef(null);
   const [status, setStatus] = useState('idle');
   const [started, setStarted] = useState(false);
@@ -38,6 +39,22 @@ export default function EmulatorScreen() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (e.key === 'F11') {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+          containerRef.current?.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    };
+    // capture: true intercepts F11 before v86 processes it
+    document.addEventListener('keydown', handleKeydown, true);
+    return () => document.removeEventListener('keydown', handleKeydown, true);
+  }, []);
+
   const statusLabel = {
     idle: null,
     loading: 'Starte DOS...',
@@ -46,7 +63,7 @@ export default function EmulatorScreen() {
   }[status];
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div ref={containerRef} className="flex flex-col items-center gap-4">
       {/* Status bar */}
       {statusLabel && (
         <div className="flex items-center gap-2 self-start">
