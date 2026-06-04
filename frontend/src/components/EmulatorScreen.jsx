@@ -55,6 +55,31 @@ export default function EmulatorScreen() {
     return () => document.removeEventListener('keydown', handleKeydown, true);
   }, []);
 
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const canvas = screenRef.current?.querySelector('canvas');
+      if (!canvas) return;
+
+      if (document.fullscreenElement) {
+        // Use the canvas pixel dimensions (not CSS size) for correct scale calculation
+        const cw = canvas.width || canvas.offsetWidth;
+        const ch = canvas.height || canvas.offsetHeight;
+        if (!cw || !ch) return;
+        const fw = containerRef.current.offsetWidth;
+        const fh = containerRef.current.offsetHeight;
+        const scale = Math.min(fw / cw, fh / ch);
+        canvas.style.transformOrigin = 'top left';
+        canvas.style.transform = `translate(${(fw - cw * scale) / 2}px, ${(fh - ch * scale) / 2}px) scale(${scale})`;
+      } else {
+        canvas.style.transform = '';
+        canvas.style.transformOrigin = '';
+      }
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+  }, []);
+
   const statusLabel = {
     idle: null,
     loading: 'Starte DOS...',
@@ -63,7 +88,7 @@ export default function EmulatorScreen() {
   }[status];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4">
+    <div ref={containerRef} className="flex flex-col items-center gap-4 bg-crt-black">
       {/* Status bar */}
       {statusLabel && (
         <div className="flex items-center gap-2 self-start">
