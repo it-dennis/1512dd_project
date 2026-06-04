@@ -28,7 +28,7 @@ export default function Emulator() {
           <span className="text-phosphor">//</span> Software-Ausstattung
         </h2>
         <p className="font-mono text-xs mb-4" style={{ color: 'rgba(170,255,204,0.40)' }}>
-          Das Festplatten-Image wird originalgetreu mit DOSBox-X aufgebaut — so wie der PC1512 damals ausgeliefert wurde.
+          Das Festplatten-Image wird originalgetreu mit DOSBox-X aufgebaut — so wie der PC1512 damals ausgeliefert wurde plus zusätzliche Software.
         </p>
         <ul className="text-sm space-y-2 font-mono" style={{ color: 'rgba(170,255,204,0.60)' }}>
           <li>→ <span className="text-phosphor">MS-DOS 3.3</span> — Amstrad-Edition, Betriebssystem des Originals</li>
