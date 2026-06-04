@@ -77,9 +77,9 @@ export default function Datenschutz() {
           </p>
           <p>Wir setzen folgenden Hoster ein:</p>
           <p>
-            <strong className="text-white">Contabo GmbH</strong><br />
-            Aschauer Str. 32a<br />
-            81549 München
+            <strong className="text-white">netcup GmbH</strong><br />
+            Daimlerstraße 25<br />
+            76185 Karlsruhe
           </p>
 
           <h4 className="font-bold text-white mt-4 mb-2">Auftragsverarbeitung</h4>
@@ -262,7 +262,7 @@ export default function Datenschutz() {
         </section>
 
         <p className="text-xs font-mono" style={{ color: 'rgba(170,255,204,0.30)' }}>
-          Quelle: e-recht24.de (Grundstruktur) · angepasst für 1512.retrokauz.de
+          Quelle: <a href="https://www.e-recht24.de/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>e-recht24.de</a> (Grundstruktur) · angepasst für 1512.retrokauz.de
         </p>
       </div>
     </div>

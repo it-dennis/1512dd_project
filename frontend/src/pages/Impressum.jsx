@@ -33,7 +33,7 @@ export default function Impressum() {
         </section>
 
         <p className="text-xs font-mono" style={{ color: 'rgba(170,255,204,0.30)' }}>
-          Quelle: e-recht24.de
+          Quelle: <a href="https://www.e-recht24.de/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>e-recht24.de</a>
         </p>
       </div>
     </div>

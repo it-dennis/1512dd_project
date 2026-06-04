@@ -158,7 +158,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 | Komponente | Details                                      |
 |------------|----------------------------------------------|
-| VPS        | Contabo, Ubuntu 24.04 LTS, IP 37.120.177.224 |
+| VPS        | netcup, Ubuntu 24.04 LTS                     |
 | Domain     | 1512.retrokauz.de                            |
 | SSL        | Let's Encrypt via Certbot, Auto-Renewal      |
 | Services   | db (MySQL 8), backend (FastAPI), frontend (nginx + React) |
