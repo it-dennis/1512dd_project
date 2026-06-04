@@ -61,15 +61,22 @@ export default function EmulatorScreen() {
       if (!canvas) return;
 
       if (document.fullscreenElement) {
-        // Use the canvas pixel dimensions (not CSS size) for correct scale calculation
-        const cw = canvas.width || canvas.offsetWidth;
-        const ch = canvas.height || canvas.offsetHeight;
-        if (!cw || !ch) return;
-        const fw = containerRef.current.offsetWidth;
-        const fh = containerRef.current.offsetHeight;
-        const scale = Math.min(fw / cw, fh / ch);
-        canvas.style.transformOrigin = 'top left';
-        canvas.style.transform = `translate(${(fw - cw * scale) / 2}px, ${(fh - ch * scale) / 2}px) scale(${scale})`;
+        // rAF ensures the browser has finished the fullscreen layout transition
+        requestAnimationFrame(() => {
+          const cw = canvas.width;
+          const ch = canvas.height;
+          if (!cw || !ch) return;
+          const fw = window.innerWidth;
+          const fh = window.innerHeight;
+          const scale = Math.min(fw / cw, fh / ch);
+          // getBoundingClientRect accounts for the canvas's offset within the container
+          // (statusbar + gap push it down, so we can't assume top=0)
+          const rect = canvas.getBoundingClientRect();
+          const tx = (fw - cw * scale) / 2 - rect.left;
+          const ty = (fh - ch * scale) / 2 - rect.top;
+          canvas.style.transformOrigin = 'top left';
+          canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        });
       } else {
         canvas.style.transform = '';
         canvas.style.transformOrigin = '';
