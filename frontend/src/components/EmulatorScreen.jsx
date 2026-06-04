@@ -154,17 +154,19 @@ export default function EmulatorScreen() {
       */}
       <div
         ref={screenRef}
-        className={`bg-crt-black ${isFullscreen ? '' : 'border border-phosphor-muted/30 rounded'}`}
+        className={`bg-crt-black ${isFullscreen ? '' : 'border border-phosphor-muted/30 rounded flex justify-center'}`}
         style={isFullscreen ? {
           width: 'max-content',
         } : {
           width: '720px',
           maxWidth: '100%',
-          minHeight: started ? '400px' : '0',
+          // minHeight only while loading so the box doesn't collapse before v86 renders;
+          // once ready, let the canvas / text-div dictate the height naturally.
+          minHeight: status === 'loading' ? '400px' : undefined,
         }}
       >
         <div style={{ whiteSpace: 'pre', font: '14px monospace', lineHeight: '14px' }} />
-        <canvas style={{ display: 'block', width: isFullscreen ? undefined : '100%' }} />
+        <canvas style={{ display: 'block' }} />
       </div>
 
       {!started && (
