@@ -13,6 +13,8 @@ import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
 import Admin from './pages/Admin';
 import Praesentation from './pages/Praesentation';
+import Impressum from './pages/Impressum';
+import Datenschutz from './pages/Datenschutz';
 
 export default function App() {
   return (
@@ -45,10 +47,16 @@ export default function App() {
               }
             />
             <Route path="/praesentation" element={<Praesentation />} />
+            <Route path="/impressum" element={<Impressum />} />
+            <Route path="/datenschutz" element={<Datenschutz />} />
           </Routes>
         </main>
         <footer className="border-t border-phosphor-muted/20 py-6 text-center font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>
           Schneider/Amstrad PC1512-DD Emulator Plattform · Weiterbildungsprojekt von Dennis Rapp · 2026
+          {' · '}
+          <Link to="/impressum" className="hover:opacity-80 transition-opacity">Impressum</Link>
+          {' · '}
+          <Link to="/datenschutz" className="hover:opacity-80 transition-opacity">Datenschutz</Link>
           {' '}
           <Link to="/admin" style={{ color: 'rgba(30,167,88,0.08)' }} className="hover:opacity-30 transition-opacity">·</Link>
         </footer>
