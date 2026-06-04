@@ -1,6 +1,8 @@
-# Schneider/Amstrad PC1512-DD — Browser-Emulator // PC1512-DD Wiki //
+# Schneider/Amstrad PC1512-DD — Browser-Emulator // PC1512-DD Wiki
 
 Ein Weiterbildungsprojekt: 3-Schicht-Webanwendung mit eingebettetem x86-Emulator (v86).
+
+**Live:** https://1512.retrokauz.de
 
 ## Systemvoraussetzungen
 
@@ -12,17 +14,16 @@ Ein Weiterbildungsprojekt: 3-Schicht-Webanwendung mit eingebettetem x86-Emulator
 ## Schnellstart (Docker — empfohlen)
 
 ```bash
-# 1. Repository klonen und ins Verzeichnis wechseln
-git clone <repo-url>
+# 1. Repository klonen
+git clone https://github.com/it-dennis/1512dd_project.git
 cd 1512DD-emu
 
-# 2. .env aus Vorlage erstellen
+# 2. .env aus Vorlage erstellen und befüllen
 cp .env.example .env
 
 # 3. v86-Binärdateien herunterladen (einmalig)
 ./scripts/get-v86.sh        # Linux/Mac
-# oder unter Windows:
-./scripts/get-v86.bat
+.\scripts\get-v86.bat       # Windows
 
 # 4. Alle Services starten
 docker compose up --build
@@ -30,20 +31,19 @@ docker compose up --build
 
 Die Anwendung ist danach erreichbar unter:
 
-| Service   | URL                         |
-|-----------|-----------------------------|
-| Frontend  | http://localhost:5173       |
-| Backend   | http://localhost:8000       |
-| API Docs  | http://localhost:8000/docs  |
-| MySQL     | localhost:3306              |
+| Service   | URL                        |
+|-----------|----------------------------|
+| Frontend  | http://localhost:5173      |
+| Backend   | http://localhost:8000      |
+| API Docs  | http://localhost:8000/docs |
 
 ### Standard-Zugangsdaten (Seed-Daten)
 
-| Rolle | E-Mail                  | Passwort   |
-|-------|-------------------------|------------|
-| Admin | admin@pc1512.local      | admin1512  |
+| Rolle | E-Mail             | Passwort  |
+|-------|--------------------|-----------|
+| Admin | admin@pc1512.local | admin1512 |
 
-# v86-Binärdateien
+## v86-Binärdateien
 
 Der Emulator benötigt Dateien, die **separat** heruntergeladen werden müssen und nicht im Repository liegen.
 
@@ -62,30 +62,34 @@ chmod +x scripts/get-v86.sh
 
 Folgende Dateien in `frontend/public/v86/` ablegen:
 
-| Datei            | Quelle                                                     |
-|------------------|------------------------------------------------------------|
-| `libv86.js`      | https://github.com/copy/v86/releases → `libv86.js`        |
-| `seabios.bin`    | v86 Release → `bios/seabios.bin`                          |
-| `vgabios.bin`    | v86 Release → `bios/vgabios.bin`                          |
-| `freedos722.img` | v86 Release → `images/freedos722.img`                     |
+| Datei            | Quelle                                         |
+|------------------|------------------------------------------------|
+| `v86.wasm`       | v86 npm-Paket (`npm pack v86`) → `build/`      |
+| `libv86.js`      | v86 npm-Paket → `build/libv86.js`              |
+| `seabios.bin`    | v86 Release → `bios/seabios.bin`               |
+| `vgabios.bin`    | v86 Release → `bios/vgabios.bin`               |
+| `freedos722.img` | v86 Release → `images/freedos722.img`          |
+
+> Im Produktions-Dockerfile werden diese Dateien automatisch heruntergeladen.
+> Geplant: Ersatz von FreeDOS durch MS-DOS 3.3 + GEM Desktop + Originalspiele.
+
+## Emulator-Bedienung
+
+| Aktion | Beschreibung |
+|--------|-------------|
+| Klick auf Bildschirm | Tastatureingaben aktivieren |
+| F11 | Vollbild ein/aus |
+| Klick außerhalb | Maus wieder freigeben |
 
 ## Backend-Setup (ohne Docker)
 
 ```bash
 cd backend
-
-# Virtuelle Umgebung erstellen und aktivieren
 python -m venv .venv
 .venv\Scripts\activate    # Windows
 source .venv/bin/activate # Linux/Mac
-
-# Abhängigkeiten installieren
 pip install -r requirements.txt
-
-# .env mit lokaler MySQL-Adresse anpassen
-# DATABASE_URL=mysql+pymysql://root:pw@localhost:3306/pc1512
-
-# Server starten (MySQL muss laufen)
+# .env anpassen: DATABASE_URL auf lokale MySQL zeigen
 uvicorn main:app --reload
 ```
 
@@ -97,68 +101,75 @@ npm install
 npm run dev
 ```
 
-## Netzwerk & Ports
-
-| Service      | Port  | Beschreibung                    |
-|--------------|-------|---------------------------------|
-| Frontend     | 5173  | React Vite Dev Server           |
-| Backend API  | 8000  | FastAPI + uvicorn               |
-| MySQL        | 3306  | Datenbank                       |
-
 ## Projektstruktur
 
-```ini
+```
 1512DD-emu/
-├── backend/                # FastAPI (Python) — Logic Layer
-│   ├── main.py             # App-Einstiegspunkt, Startup
+├── backend/                # FastAPI (Python)
+│   ├── main.py             # App-Einstiegspunkt
 │   ├── models.py           # SQLAlchemy-Modelle (User, Article, Category)
-│   ├── schemas.py          # Pydantic-Schemas (Request/Response)
-│   ├── auth.py             # JWT-Authentifizierung
+│   ├── schemas.py          # Pydantic-Schemas
+│   ├── auth.py             # JWT + bcrypt
 │   ├── seed.py             # Initiale Testdaten
 │   ├── database.py         # DB-Engine und Session
-│   └── routers/            # API-Routen (auth, articles, users)
-├── frontend/               # React + Vite — Presentation Layer
+│   └── routers/            # auth, articles, users
+├── frontend/               # React + Vite + Tailwind CSS
 │   ├── src/
 │   │   ├── components/     # Navbar, ArticleCard, EmulatorScreen, ...
-│   │   ├── pages/          # Home, Articles, Emulator, Login, Register
+│   │   ├── pages/          # Home, Articles, Emulator, Login, Register,
+│   │   │                   # VerifyEmail, TechnischeDaten, Praesentation, Admin
 │   │   ├── context/        # AuthContext (JWT-State)
 │   │   └── api/            # Axios-Client
-│   └── public/v86/         # v86 Binärdateien (separat herunterladen)
-├── db/                     # MySQL-Init
-├── docker-compose.yml      # Alle Services
+│   └── public/
+│       └── v86/            # v86-Binärdateien (separat, nicht im Repo)
+├── db/                     # MySQL-Init-Skript
+├── docker-compose.yml      # Lokale Entwicklung
+├── docker-compose.prod.yml # Produktions-Deployment (VPS)
 └── .env.example            # Umgebungsvariablen-Vorlage
 ```
 
 ## API-Endpunkte
 
-| Methode | Pfad                     | Auth   | Beschreibung             |
-|---------|--------------------------|--------|--------------------------|
-| POST    | /api/auth/register       | —      | Registrierung            |
-| POST    | /api/auth/login          | —      | Login → JWT              |
-| GET     | /api/auth/me             | User   | Eigenes Profil           |
-| GET     | /api/articles/           | —      | Alle Artikel             |
-| GET     | /api/articles/{slug}     | —      | Einzelner Artikel        |
-| POST    | /api/articles/           | Admin  | Artikel erstellen        |
-| PUT     | /api/articles/{id}       | Admin  | Artikel bearbeiten       |
-| DELETE  | /api/articles/{id}       | Admin  | Artikel löschen          |
-| GET     | /api/users/me            | User   | Eigenes Profil           |
+| Methode | Pfad                      | Auth  | Beschreibung                        |
+|---------|---------------------------|-------|-------------------------------------|
+| POST    | /api/auth/register        | —     | Registrierung + Bestätigungsmail    |
+| GET     | /api/auth/verify-email    | —     | E-Mail-Token bestätigen             |
+| POST    | /api/auth/login           | —     | Login → JWT                         |
+| GET     | /api/auth/me              | User  | Eigenes Profil                      |
+| GET     | /api/articles/            | —     | Alle Artikel                        |
+| GET     | /api/articles/{slug}      | —     | Einzelner Artikel                   |
+| POST    | /api/articles/            | Admin | Artikel erstellen                   |
+| PUT     | /api/articles/{id}        | Admin | Artikel bearbeiten                  |
+| DELETE  | /api/articles/{id}        | Admin | Artikel löschen                     |
+| GET     | /api/users/me             | User  | Eigenes Profil (users-Router)       |
 
 Interaktive Doku: http://localhost:8000/docs
 
-## Netcup MySQL (Production)
+## Deployment (VPS)
 
-Für das Deployment mit netcup MySQL die `.env` anpassen:
+Produktions-Deployment auf Contabo VPS (`/opt/1512dd`), Ubuntu 24.04 LTS.
 
-```sh
-DATABASE_URL=mysql+pymysql://dbuser:dbpassword@mysql.netcup-host.de:3306/dbname
+```bash
+# Auf dem VPS:
+cd /opt/1512dd
+git pull origin main
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-Hinweis: Shared-Webhosting erlaubt MySQL-Zugriff oft nur vom eigenen Server.
-Bei einem netcup VPS/Root-Server läuft das Backend direkt dort.
+| Komponente | Details                                      |
+|------------|----------------------------------------------|
+| VPS        | Contabo, Ubuntu 24.04 LTS, IP 37.120.177.224 |
+| Domain     | 1512.retrokauz.de                            |
+| SSL        | Let's Encrypt via Certbot, Auto-Renewal      |
+| Services   | db (MySQL 8), backend (FastAPI), frontend (nginx + React) |
 
-## Branching-Strategie
+## Umgebungsvariablen (.env)
 
-- `main` — stabiler, lauffähiger Code (kein Direktcommit)
-- `feature/...` — neue Features (z.B. `feature/admin-panel`)
-- `fix/...` — Bugfixes
-- Änderungen kommen per Pull Request in `main`
+```sh
+DATABASE_URL=mysql+pymysql://user:password@db:3306/pc1512
+SECRET_KEY=dein-jwt-secret
+BREVO_API_KEY=dein-brevo-key
+EMAIL_FROM=noreply@retrokauz.de
+```
+
+E-Mail-Versand erfolgt über die **Brevo REST API** (kein SMTP — Port 587 war beim Hoster geblockt).
