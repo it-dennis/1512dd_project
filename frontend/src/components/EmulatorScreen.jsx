@@ -11,111 +11,130 @@ const EMULATOR_CONFIG = {
 };
 
 export default function EmulatorScreen() {
-  const screenRef = useRef(null);
+  // containerRef  = fullscreen target (outer wrapper)
+  // screenRef     = v86 screen_container (text div + canvas, natural size)
   const containerRef = useRef(null);
-  const emulatorRef = useRef(null);
-  const [status, setStatus] = useState('idle');
-  const [started, setStarted] = useState(false);
+  const screenRef    = useRef(null);
+  const emulatorRef  = useRef(null);
+
+  const [status, setStatus]         = useState('idle');
+  const [started, setStarted]       = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const startEmulator = () => {
-    if (!window.V86) {
-      setStatus('error');
-      return;
-    }
+    if (!window.V86) { setStatus('error'); return; }
     setStatus('loading');
     setStarted(true);
-
     emulatorRef.current = new window.V86({
       ...EMULATOR_CONFIG,
       screen_container: screenRef.current,
     });
-
     emulatorRef.current.add_listener('emulator-ready', () => setStatus('ready'));
   };
 
+  // Cleanup on unmount
   useEffect(() => {
-    return () => {
-      if (emulatorRef.current) emulatorRef.current.destroy();
-    };
+    return () => { if (emulatorRef.current) emulatorRef.current.destroy(); };
   }, []);
 
+  // F11 → toggle fullscreen (capture phase so v86 never sees it)
   useEffect(() => {
-    const handleKeydown = (e) => {
-      if (e.key === 'F11') {
-        e.preventDefault();
-        if (!document.fullscreenElement) {
-          containerRef.current?.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
+    const onKey = (e) => {
+      if (e.key !== 'F11') return;
+      e.preventDefault();
+      if (!document.fullscreenElement) {
+        containerRef.current?.requestFullscreen();
+      } else {
+        document.exitFullscreen();
       }
     };
-    // capture: true intercepts F11 before v86 processes it
-    document.addEventListener('keydown', handleKeydown, true);
-    return () => document.removeEventListener('keydown', handleKeydown, true);
+    document.addEventListener('keydown', onKey, true);
+    return () => document.removeEventListener('keydown', onKey, true);
   }, []);
 
+  // Fullscreen change → scale the v86 screen container to fill the viewport
   useEffect(() => {
-    const onFullscreenChange = () => {
-      const canvas = screenRef.current?.querySelector('canvas');
-      if (!canvas) return;
+    const onFsChange = () => {
+      const screen = screenRef.current;
+      if (!screen) return;
 
       if (document.fullscreenElement) {
-        // rAF ensures the browser has finished the fullscreen layout transition
-        requestAnimationFrame(() => {
-          const cw = canvas.width;
-          const ch = canvas.height;
-          if (!cw || !ch) return;
+        setIsFullscreen(true);
+        // Reset any previous transform so we measure the natural size
+        screen.style.transform = '';
+        screen.style.transformOrigin = '';
+
+        // Two rAFs: first lets React/browser settle the layout,
+        // second reads correct natural dimensions of the v86 container
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const sw = screen.offsetWidth;
+          const sh = screen.offsetHeight;
+          if (!sw || !sh) return;
+
           const fw = window.innerWidth;
           const fh = window.innerHeight;
-          const scale = Math.min(fw / cw, fh / ch);
-          // getBoundingClientRect accounts for the canvas's offset within the container
-          // (statusbar + gap push it down, so we can't assume top=0)
-          const rect = canvas.getBoundingClientRect();
-          const tx = (fw - cw * scale) / 2 - rect.left;
-          const ty = (fh - ch * scale) / 2 - rect.top;
-          canvas.style.transformOrigin = 'top left';
-          canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-        });
+          const scale = Math.min(fw / sw, fh / sh);
+
+          // getBoundingClientRect gives position relative to viewport,
+          // so we can correct for statusbar / gap offsets
+          const rect = screen.getBoundingClientRect();
+          const tx = (fw - sw * scale) / 2 - rect.left;
+          const ty = (fh - sh * scale) / 2 - rect.top;
+
+          screen.style.transformOrigin = 'top left';
+          screen.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        }));
       } else {
-        canvas.style.transform = '';
-        canvas.style.transformOrigin = '';
+        setIsFullscreen(false);
+        screen.style.transform = '';
+        screen.style.transformOrigin = '';
       }
     };
 
-    document.addEventListener('fullscreenchange', onFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
   const statusLabel = {
-    idle: null,
+    idle:    null,
     loading: 'Starte DOS...',
-    ready: 'Bereit',
-    error: 'v86 nicht gefunden — Binärdateien fehlen (siehe README)',
+    ready:   'Bereit',
+    error:   'v86 nicht gefunden — Binärdateien fehlen (siehe README)',
   }[status];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4 bg-crt-black">
+    <div
+      ref={containerRef}
+      className="flex flex-col items-center bg-crt-black"
+      style={{ gap: isFullscreen ? 0 : '1rem' }}
+    >
       {/* Status bar */}
-      {statusLabel && (
+      {statusLabel && !isFullscreen && (
         <div className="flex items-center gap-2 self-start">
           <div className={`w-2 h-2 rounded-full ${
-            status === 'ready' ? 'bg-phosphor' :
-            status === 'error' ? 'bg-red-500' :
+            status === 'ready'   ? 'bg-phosphor' :
+            status === 'error'   ? 'bg-red-500'  :
             'bg-phosphor animate-pulse'
           }`} />
-          <span className="font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>{statusLabel}</span>
+          <span className="font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
+            {statusLabel}
+          </span>
         </div>
       )}
 
-      {/* Screen container — v86 requires exactly: first a div (text mode), then a canvas (VGA) */}
+      {/* v86 screen_container — must have: first a div (text mode), then a canvas (VGA).
+          No w-full here: natural width so fullscreen scale is calculated from actual content size. */}
       <div
         ref={screenRef}
-        className="border border-phosphor-muted/30 rounded bg-crt-black w-full"
-        style={{ minHeight: started ? '400px' : '0' }}
+        className="border border-phosphor-muted/30 rounded bg-crt-black"
+        style={{
+          minHeight: started ? '400px' : '0',
+          width: started ? '720px' : '0',
+          maxWidth: '100%',
+        }}
       >
         <div style={{ whiteSpace: 'pre', font: '14px monospace', lineHeight: '14px' }} />
-        <canvas style={{ display: 'block', width: '100%' }} />
+        <canvas style={{ display: 'block' }} />
       </div>
 
       {/* Start button */}
@@ -125,7 +144,7 @@ export default function EmulatorScreen() {
         </button>
       )}
 
-      {started && status === 'ready' && (
+      {started && status === 'ready' && !isFullscreen && (
         <p className="font-mono text-xs" style={{ color: 'rgba(30,167,88,0.50)' }}>
           Klick auf den Bildschirm um Tastatureingaben zu aktivieren · F11 = Vollbild
         </p>
