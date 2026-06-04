@@ -11,14 +11,13 @@ const EMULATOR_CONFIG = {
 };
 
 export default function EmulatorScreen() {
-  // containerRef  = fullscreen target (outer wrapper)
-  // screenRef     = v86 screen_container (text div + canvas, natural size)
   const containerRef = useRef(null);
   const screenRef    = useRef(null);
   const emulatorRef  = useRef(null);
+  const rafRef       = useRef(null);
 
-  const [status, setStatus]         = useState('idle');
-  const [started, setStarted]       = useState(false);
+  const [status,      setStatus]      = useState('idle');
+  const [started,     setStarted]     = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const startEmulator = () => {
@@ -32,12 +31,11 @@ export default function EmulatorScreen() {
     emulatorRef.current.add_listener('emulator-ready', () => setStatus('ready'));
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => { if (emulatorRef.current) emulatorRef.current.destroy(); };
   }, []);
 
-  // F11 → toggle fullscreen (capture phase so v86 never sees it)
+  // F11 — intercept before v86 can receive it
   useEffect(() => {
     const onKey = (e) => {
       if (e.key !== 'F11') return;
@@ -52,47 +50,73 @@ export default function EmulatorScreen() {
     return () => document.removeEventListener('keydown', onKey, true);
   }, []);
 
-  // Fullscreen change → scale the v86 screen container to fill the viewport
+  // Core: apply a centered scale-transform to screenRef so it fills the viewport.
+  // Called on fullscreen entry AND whenever v86 changes the VGA mode (ResizeObserver).
+  const applyTransform = () => {
+    const screen = screenRef.current;
+    if (!screen || !document.fullscreenElement) return;
+
+    // Temporarily clear the transform so we read the natural (untransformed) size.
+    screen.style.transform = '';
+    screen.style.transformOrigin = '';
+
+    const sw = screen.offsetWidth;
+    const sh = screen.offsetHeight;
+    if (!sw || !sh) return;
+
+    const fw = window.innerWidth;
+    const fh = window.innerHeight;
+    const scale = Math.min(fw / sw, fh / sh);
+
+    // getBoundingClientRect gives the current position relative to the viewport;
+    // we subtract it so the translate moves the element to the perfectly centred spot.
+    const rect = screen.getBoundingClientRect();
+    const tx = (fw - sw * scale) / 2 - rect.left;
+    const ty = (fh - sh * scale) / 2 - rect.top;
+
+    screen.style.transformOrigin = 'top left';
+    screen.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  };
+
+  // Debounced wrapper used by ResizeObserver to avoid transform thrashing
+  // during rapid VGA mode transitions.
+  const scheduleTransform = () => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      applyTransform();
+      rafRef.current = null;
+    });
+  };
+
+  // Fullscreen enter/exit
   useEffect(() => {
     const onFsChange = () => {
-      const screen = screenRef.current;
-      if (!screen) return;
-
       if (document.fullscreenElement) {
         setIsFullscreen(true);
-        // Reset any previous transform so we measure the natural size
-        screen.style.transform = '';
-        screen.style.transformOrigin = '';
-
-        // Two rAFs: first lets React/browser settle the layout,
-        // second reads correct natural dimensions of the v86 container
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          const sw = screen.offsetWidth;
-          const sh = screen.offsetHeight;
-          if (!sw || !sh) return;
-
-          const fw = window.innerWidth;
-          const fh = window.innerHeight;
-          const scale = Math.min(fw / sw, fh / sh);
-
-          // getBoundingClientRect gives position relative to viewport,
-          // so we can correct for statusbar / gap offsets
-          const rect = screen.getBoundingClientRect();
-          const tx = (fw - sw * scale) / 2 - rect.left;
-          const ty = (fh - sh * scale) / 2 - rect.top;
-
-          screen.style.transformOrigin = 'top left';
-          screen.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-        }));
+        // Two rAFs: first lets React re-render with fullscreen styles (natural width),
+        // second reads the correct settled dimensions.
+        requestAnimationFrame(() => requestAnimationFrame(applyTransform));
       } else {
         setIsFullscreen(false);
-        screen.style.transform = '';
-        screen.style.transformOrigin = '';
+        const screen = screenRef.current;
+        if (screen) {
+          screen.style.transform = '';
+          screen.style.transformOrigin = '';
+        }
       }
     };
-
     document.addEventListener('fullscreenchange', onFsChange);
     return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
+
+  // Watch for VGA mode changes (canvas / text-div resize) while in fullscreen.
+  useEffect(() => {
+    if (!screenRef.current) return;
+    const ro = new ResizeObserver(() => {
+      if (document.fullscreenElement) scheduleTransform();
+    });
+    ro.observe(screenRef.current);
+    return () => ro.disconnect();
   }, []);
 
   const statusLabel = {
@@ -108,12 +132,11 @@ export default function EmulatorScreen() {
       className="flex flex-col items-center bg-crt-black"
       style={{ gap: isFullscreen ? 0 : '1rem' }}
     >
-      {/* Status bar */}
-      {statusLabel && !isFullscreen && (
+      {!isFullscreen && statusLabel && (
         <div className="flex items-center gap-2 self-start">
           <div className={`w-2 h-2 rounded-full ${
-            status === 'ready'   ? 'bg-phosphor' :
-            status === 'error'   ? 'bg-red-500'  :
+            status === 'ready' ? 'bg-phosphor' :
+            status === 'error' ? 'bg-red-500'  :
             'bg-phosphor animate-pulse'
           }`} />
           <span className="font-mono text-sm" style={{ color: 'rgba(170,255,204,0.60)' }}>
@@ -122,22 +145,28 @@ export default function EmulatorScreen() {
         </div>
       )}
 
-      {/* v86 screen_container — must have: first a div (text mode), then a canvas (VGA).
-          No w-full here: natural width so fullscreen scale is calculated from actual content size. */}
+      {/*
+        screenRef = v86 screen_container.
+        Normal mode : fixed 720 px wide, canvas stretched to fill (looks good in card).
+        Fullscreen  : no fixed width → shrinks to natural content size (canvas or text div),
+                      so the scale factor is based on actual content, not dead space.
+        minHeight only in normal mode so the box doesn't collapse before v86 renders.
+      */}
       <div
         ref={screenRef}
-        className="border border-phosphor-muted/30 rounded bg-crt-black"
-        style={{
-          minHeight: started ? '400px' : '0',
-          width: started ? '720px' : '0',
+        className={`bg-crt-black ${isFullscreen ? '' : 'border border-phosphor-muted/30 rounded'}`}
+        style={isFullscreen ? {
+          width: 'max-content',
+        } : {
+          width: '720px',
           maxWidth: '100%',
+          minHeight: started ? '400px' : '0',
         }}
       >
         <div style={{ whiteSpace: 'pre', font: '14px monospace', lineHeight: '14px' }} />
-        <canvas style={{ display: 'block' }} />
+        <canvas style={{ display: 'block', width: isFullscreen ? undefined : '100%' }} />
       </div>
 
-      {/* Start button */}
       {!started && (
         <button onClick={startEmulator} className="btn-primary text-base px-8 py-3">
           PC1512 starten
