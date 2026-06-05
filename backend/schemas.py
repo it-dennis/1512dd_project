@@ -33,6 +33,15 @@ class UserOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str
+
+
 class CategoryOut(BaseModel):
     id: int
     name: str

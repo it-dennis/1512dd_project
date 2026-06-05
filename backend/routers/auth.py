@@ -8,11 +8,12 @@ from database import get_db
 import models
 import schemas
 from auth import hash_password, verify_password, create_access_token, require_user
-from email_utils import send_verification_email
+from email_utils import send_verification_email, send_password_reset_email
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 VERIFY_TOKEN_EXPIRE_HOURS = 72
+RESET_TOKEN_EXPIRE_HOURS = 1
 
 
 @router.post("/register", response_model=schemas.RegisterResponse)
@@ -67,6 +68,32 @@ def verify_email(token: str, db: Session = Depends(get_db)):
     user.verification_token_expires = None
     db.commit()
     return {"message": "E-Mail-Adresse erfolgreich bestätigt! Du kannst dich jetzt einloggen."}
+
+
+@router.post("/request-password-reset", response_model=schemas.RegisterResponse)
+def request_password_reset(data: schemas.PasswordResetRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == data.email).first()
+    if user:
+        token = secrets.token_urlsafe(32)
+        user.password_reset_token = token
+        user.password_reset_token_expires = datetime.utcnow() + timedelta(hours=RESET_TOKEN_EXPIRE_HOURS)
+        db.commit()
+        background_tasks.add_task(send_password_reset_email, user.email, user.username, token)
+    return {"message": "Falls diese E-Mail-Adresse registriert ist, erhältst du einen Reset-Link."}
+
+
+@router.post("/reset-password", response_model=schemas.RegisterResponse)
+def reset_password(data: schemas.PasswordResetConfirm, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.password_reset_token == data.token).first()
+    if not user:
+        raise HTTPException(status_code=400, detail="Ungültiger oder abgelaufener Reset-Link")
+    if user.password_reset_token_expires and datetime.utcnow() > user.password_reset_token_expires:
+        raise HTTPException(status_code=400, detail="Der Reset-Link ist abgelaufen. Bitte fordere einen neuen an.")
+    user.password_hash = hash_password(data.new_password)
+    user.password_reset_token = None
+    user.password_reset_token_expires = None
+    db.commit()
+    return {"message": "Passwort erfolgreich geändert. Du kannst dich jetzt einloggen."}
 
 
 @router.get("/me", response_model=schemas.UserOut)

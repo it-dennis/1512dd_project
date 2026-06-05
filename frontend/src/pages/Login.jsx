@@ -66,6 +66,11 @@ export default function Login() {
         <button type="submit" disabled={loading} className="btn-primary w-full py-3">
           {loading ? 'Einloggen...' : 'Einloggen'}
         </button>
+        <div className="text-right">
+          <Link to="/forgot-password" className="font-mono text-xs hover:underline" style={{ color: 'rgba(170,255,204,0.50)' }}>
+            Passwort vergessen?
+          </Link>
+        </div>
       </form>
 
       <p className="font-mono text-sm mt-6 text-center" style={{ color: 'rgba(30,167,88,0.70)' }}>

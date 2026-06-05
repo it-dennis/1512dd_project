@@ -19,6 +19,10 @@ export const authApi = {
   verifyEmail: (token) =>
     api.get(`/api/auth/verify-email?token=${token}`),
   me: () => api.get('/api/auth/me'),
+  requestPasswordReset: (email) =>
+    api.post('/api/auth/request-password-reset', { email }),
+  resetPassword: (token, new_password) =>
+    api.post('/api/auth/reset-password', { token, new_password }),
 };
 
 export const articlesApi = {

@@ -41,7 +41,7 @@ Die Anwendung ist danach erreichbar unter:
 
 | Rolle | E-Mail             | Passwort  |
 |-------|--------------------|-----------|
-| Admin | admin@pc1512.local | admin1512 |
+| Admin | admin@retrokauz.de | admin1512 |
 
 ## v86-Binärdateien
 
@@ -132,10 +132,12 @@ npm run dev
 
 | Methode | Pfad                      | Auth  | Beschreibung                        |
 |---------|---------------------------|-------|-------------------------------------|
-| POST    | /api/auth/register        | —     | Registrierung + Bestätigungsmail    |
-| GET     | /api/auth/verify-email    | —     | E-Mail-Token bestätigen             |
-| POST    | /api/auth/login           | —     | Login → JWT                         |
-| GET     | /api/auth/me              | User  | Eigenes Profil                      |
+| POST    | /api/auth/register                | —     | Registrierung + Bestätigungsmail    |
+| GET     | /api/auth/verify-email            | —     | E-Mail-Token bestätigen             |
+| POST    | /api/auth/login                   | —     | Login → JWT                         |
+| POST    | /api/auth/request-password-reset  | —     | Passwort-Reset-Mail anfordern       |
+| POST    | /api/auth/reset-password          | —     | Passwort via Token zurücksetzen     |
+| GET     | /api/auth/me                      | User  | Eigenes Profil                      |
 | GET     | /api/articles/            | —     | Alle Artikel                        |
 | GET     | /api/articles/{slug}      | —     | Einzelner Artikel                   |
 | POST    | /api/articles/            | Admin | Artikel erstellen                   |

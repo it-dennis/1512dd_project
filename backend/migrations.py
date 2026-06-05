@@ -8,6 +8,8 @@ def run_migrations():
         "ALTER TABLE users ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE",
         "ALTER TABLE users ADD COLUMN verification_token VARCHAR(255) NULL",
         "ALTER TABLE users ADD COLUMN verification_token_expires DATETIME NULL",
+        "ALTER TABLE users ADD COLUMN password_reset_token VARCHAR(255) NULL",
+        "ALTER TABLE users ADD COLUMN password_reset_token_expires DATETIME NULL",
     ]
     with engine.connect() as conn:
         for stmt in statements:
